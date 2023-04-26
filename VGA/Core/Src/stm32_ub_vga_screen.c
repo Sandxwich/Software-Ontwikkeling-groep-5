@@ -32,6 +32,26 @@ void P_VGA_InitINT(void);
 void P_VGA_InitDMA(void);
 
 
+
+//--------------------------------------------------------------
+// VGA Structure
+//--------------------------------------------------------------
+typedef struct {
+  uint16_t hsync_cnt;   // counter
+  uint32_t start_adr;   // start_adres
+  uint32_t dma2_cr_reg; // Register constant CR-Register
+}VGA_t;
+VGA_t VGA;
+
+
+
+//--------------------------------------------------------------
+// Display RAM
+//--------------------------------------------------------------
+uint8_t VGA_RAM1[(VGA_DISPLAY_X+1)*VGA_DISPLAY_Y];
+
+
+
 //--------------------------------------------------------------
 // Init VGA-Module
 //--------------------------------------------------------------
