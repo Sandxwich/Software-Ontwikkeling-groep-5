@@ -24,9 +24,10 @@
 #include "usart.h"
 #include "gpio.h"
 
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "EE-APi.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -102,9 +103,6 @@ int main(void)
   UB_VGA_Screen_Init(); // Init VGA-Screen
 
   UB_VGA_FillScreen(VGA_COL_WHITE);
-  UB_VGA_SetPixel(10,10,10);
-  UB_VGA_SetPixel(0,0,0x00);
-  UB_VGA_SetPixel(319,0,0x00);
 
   int i;
 
@@ -124,6 +122,7 @@ int main(void)
   // Test to see if the screen reacts to UART
   unsigned char colorTest = TRUE;
   unsigned int j =0;
+  API_draw_line(0, 0, 310, 240, 2, VGA_COL_RED);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -157,7 +156,7 @@ int main(void)
 		  case 7: colorTest=VGA_COL_YELLOW; break;
 
 		  }
-		  UB_VGA_FillScreen(colorTest);
+		  API_draw_line(21, 2, 102, 110, 10, colorTest);
 		  if (j==7) j = 0;
 
 

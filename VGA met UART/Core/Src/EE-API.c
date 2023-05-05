@@ -2,12 +2,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "EE-API.h"
 
-// Define the image dimensions
-#define WIDTH  256
-#define HEIGHT 256
-
-// Define the image data as a global array
-unsigned char image[WIDTH * HEIGHT * 3];
 
 /*
  * int API_draw_line(int x_1, y_1, x_2, y2, color, dikte)
@@ -26,47 +20,41 @@ unsigned char image[WIDTH * HEIGHT * 3];
  *
  */
 
-int API_draw_line(int x_1, y_1, x_2, y2, color, dikte)
+int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_t dikte, uint8_t color)
 {
-	int error = NULL;
+	int error = 0;
 	//error checks
-	if(checkcolor(color))
-		return error;
+//	if(checkcolor(color))
+//		return error;
 
-	int dx = abs(x1 - x0);
-	    int dy = abs(y1 - y0);
-	    int sx = (x0 < x1) ? 1 : -1;
-	    int sy = (y0 < y1) ? 1 : -1;
-	    int err = dx - dy;
-	    int e2, x, y, i;
+	int dx = x_2 - x_1;
+	int dy = y_2 - y_1;
+	int steps;
+	if(abs(dx)>abs(dy))
+	{
+		steps = abs(dx);
+	}
+	else if(abs(dy)>abs(dx))
+	{
+		steps = abs(dy);
+	}
 
-	    // Set the pixels along the center line of the given thickness
-	    for (i = -thickness/2; i <= thickness/2; i++) {
-	        x = x0;
-	        y = y0 + i;
-	        while (1) {
-	            setPixel(x, y, color);
-	            if (x == x1 && y == y1) {
-	                break;
-	            }
-	            e2 = 2 * err;
-	            if (e2 > -dy) {
-	                err -= dy;
-	                x += sx;
-	            }
-	            if (e2 < dx) {
-	                err += dx;
-	                y += sy;
-	            }
-	        }
-	    }
+	float xIncrement = (float) dx / steps;
+	float yIncrement = (float) dy / steps;
+	int i;
 
+	// Set the pixels along the center line of the given thickness
+	for (i = 0-abs(dikte/2); i <= abs(dikte/2); i++) {
+		float x = x_1 + 0.5;
+		float y = y_1 + i + 0.5;
+		int j;
+		for (j = 0; j < steps; j++) {
+			UB_VGA_SetPixel(x, y, color);
+			x += xIncrement;
+			y += yIncrement;
+		}
+	}
 	return error;
 }
 
-void setPixel(int x, int y, unsigned char r, unsigned char g, unsigned char b) {
-    int index = (y * WIDTH + x) * 3;
-    image[index] = r;
-    image[index + 1] = g;
-    image[index + 2] = b;
-}
+
