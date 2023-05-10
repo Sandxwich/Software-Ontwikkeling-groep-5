@@ -108,15 +108,10 @@ typedef struct
 	char command_execute_flag;				/* Set = whole transmission is received, ready for processing \
 											   Reset = still receiving*/
 }input_vars;
+
 extern input_vars input;
 
-typedef struct
-{
-	unsigned char Variable_length; // Hoeveelheid array
-	char Parser_Message[BUFFER_LEN][BUFFER_LEN]; // 2d array voor het returnen van de message
-} Message_parser;
 
-extern Message_parser Debugging;
 
 /* Globals -------------------------------------------------------------------*/
 extern volatile char container[1024];
