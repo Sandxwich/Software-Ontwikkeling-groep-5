@@ -89,7 +89,7 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 
 #define BYTE_BUFLEN 	 1
-#define LINE_BUFLEN 	 1024
+#define LINE_BUFLEN 	 1
 #define CARRIAGE_RETURN  13 /* carriage return char \r */
 #define LINE_FEED 		 10 /* linefeed char \n		   */
 

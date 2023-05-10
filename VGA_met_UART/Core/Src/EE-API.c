@@ -57,4 +57,63 @@ int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_
 	return error;
 }
 
+int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
+{
+	int error = 0;
 
+
+
+	  uint16_t xp,yp,xp2,yp2;
+	  yp2=0;
+	  for(yp = 20; yp < 120; yp++) {
+	    for(xp = 0; xp < 100; xp++) {
+
+
+	      UB_VGA_SetPixel(xp, yp, bitmap[yp2][xp]);
+	    }
+	    yp2++;
+	  }
+
+
+//	switch (nr)
+//	{
+//
+//	case 0:	// Pijl up
+//	{
+//		//doe iets met de bitmap
+//		break;
+//	}
+//
+//	case 1:	// Pijl down
+//	{
+//
+//		break;
+//	}
+//
+//	case 2:	// Pijl Left
+//	{
+//
+//		break;
+//	}
+//
+//	case 3: // Pijl Right
+//	{
+//
+//		break;
+//	}
+//
+//	case 4: // Smiley
+//	{
+//
+//		break;
+//	}
+//
+//	case 5: // Frowney
+//	{
+//
+//		break;
+//	}
+//
+//	}
+	return error;
+}

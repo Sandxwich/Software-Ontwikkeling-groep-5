@@ -108,10 +108,13 @@ int main(void)
 
   UB_VGA_Screen_Init(); // Init VGA-Screen
 
-  UB_VGA_FillScreen(VGA_COL_WHITE);
+  UB_VGA_FillScreen(VGA_COL_RED);
   UB_VGA_SetPixel(10,10,10);
   UB_VGA_SetPixel(0,0,0x00);
   UB_VGA_SetPixel(319,0,0x00);
+
+  API_draw_bitmap(0,0,0);
+
   unsigned int i = 0;
 
 
