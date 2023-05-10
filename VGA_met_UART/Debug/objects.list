@@ -1,3 +1,4 @@
+"./Core/Src/Logic_Layer.o"
 "./Core/Src/dma.o"
 "./Core/Src/gpio.o"
 "./Core/Src/main.o"

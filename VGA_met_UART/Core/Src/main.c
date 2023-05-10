@@ -48,6 +48,9 @@
 /* USER CODE BEGIN PV */
 input_vars input;
 
+Message_parser Debugging;
+
+
 volatile char container[1024];
 volatile int temp;
 volatile int key;
@@ -56,6 +59,9 @@ volatile int key;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+
+Message_parser LogicLayer_Parser2(char*, unsigned int);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -105,8 +111,8 @@ int main(void)
   UB_VGA_SetPixel(10,10,10);
   UB_VGA_SetPixel(0,0,0x00);
   UB_VGA_SetPixel(319,0,0x00);
+  unsigned int i = 0;
 
-  int i;
 
   for(i = 0; i < LINE_BUFLEN; i++)
 	  input.line_rx_buffer[i] = 0;
@@ -119,46 +125,28 @@ int main(void)
   // HAl wants a memory location to store the charachter it receives from the UART
   // We will pass it an array, but we will not use it. We declare our own variable in the interupt handler
   // See stm32f4xx_it.c
-  HAL_UART_Receive_IT(&huart2, input.byte_buffer_rx, BYTE_BUFLEN);
+  HAL_UART_Receive_IT(&huart2, &input.byte_buffer_rx, LINE_BUFLEN);
 
   // Test to see if the screen reacts to UART
   unsigned char colorTest = TRUE;
-  unsigned int j =0;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
 	  if(input.command_execute_flag == TRUE)
 	  {
+		  i = 0;
+
+		  Debugging = LogicLayer_Parser2(&input.line_rx_buffer, LINE_BUFLEN);
+
+
 		  // Do some stuff
 		  printf("yes\n");
-		  switch (j++)
-		  {
-		  case 0:
-		  {
-			  colorTest=VGA_COL_BLACK;
-			  break;
-		  }
-
-		  case 1: colorTest=VGA_COL_BLUE; break;
-
-		  case 2: colorTest=VGA_COL_GREEN; break;
-
-		  case 3: colorTest=VGA_COL_RED; break;
-
-		  case 4: colorTest=VGA_COL_WHITE; break;
-
-		  case 5: colorTest=VGA_COL_CYAN; break;
-
-		  case 6: colorTest=VGA_COL_MAGENTA; break;
-
-		  case 7: colorTest=VGA_COL_YELLOW; break;
-
-		  }
 		  UB_VGA_FillScreen(colorTest);
-		  if (j==7) j = 0;
 
 
 		  // When finished reset the flag
@@ -227,6 +215,55 @@ USART_PRINTF
 {
 	HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);	//Write character to UART2
 	return ch;												//Return the character
+}
+
+
+Message_parser LogicLayer_Parser2(char *Message, unsigned int Messagelength)
+{
+	unsigned int j = 0;
+	unsigned int k = 0;
+	unsigned int i = 0;
+	unsigned int l = 0;
+
+	Message_parser localParser;
+
+	  while (Message[i] != 0) 	// Kijk voor line end
+	  {
+
+		  while (Message[i] != 44 && Message[i] != 0)		//Detectie van de comma seperator
+		  {
+			  i++;
+
+			  if (i > Messagelength) // Error detectie tegen oneindige while loop
+			  {
+				  printf("Error , not detected \n");
+				  break;
+			  }
+		  }
+		  l = 0;
+	  	  for (; j<i; j++)
+	  	  {
+	  		localParser.Parser_Message[k][l] = Message[j];
+	  		l++;
+	  	  }
+	  	  j = i;
+	  	localParser.Parser_Message[k][l] = '\0';
+
+	  	  i++;
+
+	  	  k=(k+1); //verhoog iterator voor meerder berichten opslag
+
+	  	  if (k > BUFFER_LEN) // Error detectie tegen oneindige while loop
+	  	  	  {
+	  		  	  printf("Error no message end detected \n");
+	  		  	  break;
+	  	  	  }
+
+	  }
+
+	localParser.Variable_length = k;
+
+	return localParser;
 }
 
 /* USER CODE END 4 */

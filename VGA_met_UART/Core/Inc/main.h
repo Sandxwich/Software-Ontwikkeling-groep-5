@@ -40,6 +40,7 @@ extern "C" {
 
 #include "stm32_ub_vga_screen.h"
 
+#include "Logic_Layer.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -95,6 +96,8 @@ void Error_Handler(void);
 #define FALSE 	0x00
 #define TRUE 	0xFF
 
+#define BUFFER_LEN 20
+
 /* Struct's ------------------------------------------------------------------*/
 typedef struct
 {
@@ -106,6 +109,14 @@ typedef struct
 											   Reset = still receiving*/
 }input_vars;
 extern input_vars input;
+
+typedef struct
+{
+	unsigned char Variable_length; // Hoeveelheid array
+	char Parser_Message[BUFFER_LEN][BUFFER_LEN]; // 2d array voor het returnen van de message
+} Message_parser;
+
+extern Message_parser Debugging;
 
 /* Globals -------------------------------------------------------------------*/
 extern volatile char container[1024];
