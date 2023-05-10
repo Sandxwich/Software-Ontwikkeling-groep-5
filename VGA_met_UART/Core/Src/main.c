@@ -24,6 +24,7 @@
 #include "usart.h"
 #include "gpio.h"
 
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -60,7 +61,7 @@ volatile int key;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 
-Message_parser LogicLayer_Parser2(char*, unsigned int);
+
 
 /* USER CODE BEGIN PFP */
 
@@ -141,7 +142,7 @@ int main(void)
 	  {
 		  i = 0;
 
-		  Debugging = LogicLayer_Parser2(&input.line_rx_buffer, LINE_BUFLEN);
+		  Debugging = LogicLayer_Parser(&input.line_rx_buffer, LINE_BUFLEN);
 
 
 		  // Do some stuff
@@ -218,53 +219,7 @@ USART_PRINTF
 }
 
 
-Message_parser LogicLayer_Parser2(char *Message, unsigned int Messagelength)
-{
-	unsigned int j = 0;
-	unsigned int k = 0;
-	unsigned int i = 0;
-	unsigned int l = 0;
 
-	Message_parser localParser;
-
-	  while (Message[i] != 0) 	// Kijk voor line end
-	  {
-
-		  while (Message[i] != 44 && Message[i] != 0)		//Detectie van de comma seperator
-		  {
-			  i++;
-
-			  if (i > Messagelength) // Error detectie tegen oneindige while loop
-			  {
-				  printf("Error , not detected \n");
-				  break;
-			  }
-		  }
-		  l = 0;
-	  	  for (; j<i; j++)
-	  	  {
-	  		localParser.Parser_Message[k][l] = Message[j];
-	  		l++;
-	  	  }
-	  	  j = i;
-	  	localParser.Parser_Message[k][l] = '\0';
-
-	  	  i++;
-
-	  	  k=(k+1); //verhoog iterator voor meerder berichten opslag
-
-	  	  if (k > BUFFER_LEN) // Error detectie tegen oneindige while loop
-	  	  	  {
-	  		  	  printf("Error no message end detected \n");
-	  		  	  break;
-	  	  	  }
-
-	  }
-
-	localParser.Variable_length = k;
-
-	return localParser;
-}
 
 /* USER CODE END 4 */
 
