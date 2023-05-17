@@ -38,6 +38,7 @@ extern "C" {
 #include "string.h"
 #include <stdlib.h>
 
+
 #include "stm32_ub_vga_screen.h"
 
 #include "Logic_Layer.h"
@@ -89,7 +90,7 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 
 #define BYTE_BUFLEN 	 1
-#define LINE_BUFLEN 	 1
+#define LINE_BUFLEN 	 1000
 #define CARRIAGE_RETURN  13 /* carriage return char \r */
 #define LINE_FEED 		 10 /* linefeed char \n		   */
 
