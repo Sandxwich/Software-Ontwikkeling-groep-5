@@ -57,4 +57,10 @@ int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_
 	return error;
 }
 
+int API_clear_screen(uint8_t color)
+{
+	UB_VGA_FillScreen(color);
+
+}
+
 
