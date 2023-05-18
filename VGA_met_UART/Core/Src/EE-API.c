@@ -128,7 +128,7 @@ int API_read_bitmap_SD()
     UINT i = 0;
     unsigned char j;
     uint k = 0; // kijken welk variable we zijn
-    unsigned char Height,Width;
+    unsigned int Height,Width;
 
     fres = f_mount(&FatFs, "", 1); //1=mount now
     if (fres != FR_OK) {
@@ -141,11 +141,10 @@ int API_read_bitmap_SD()
 	printf("f_open error (%i)\r\n",fres);
 	while(1);
 	}
-	printf("I was able to open 'test.txt' for reading!\r\n");
 
 	char readBuf[30];
-	unsigned char test = 0;
-	unsigned char test2 = 0;
+	unsigned int test = 0;
+	unsigned int test2 = 0;
 	i = 30;
 
 	while (i == 30)
@@ -160,8 +159,6 @@ int API_read_bitmap_SD()
 				test2 = readBuf[j]-'0';
 				test *= 10;
 				test += test2;
-
-
 			}
 			else
 			{
@@ -175,14 +172,14 @@ int API_read_bitmap_SD()
 				}
 				if (k > 1)
 				{
-					UB_VGA_SetPixel(xp, yp, test);
+					UB_VGA_SetPixel(xp, yp, (unsigned char)test);
 					xp++;
-					if (xp >= Width)
+					if (xp == Width)
 					{
 						yp++;
 						xp = 0;
 					}
-					if (yp == Height)
+					if (yp == Height-1)
 					{
 						break;
 					}
