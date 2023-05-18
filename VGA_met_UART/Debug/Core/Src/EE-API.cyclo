@@ -1,2 +1,3 @@
 EE-API.c:23:5:API_draw_line	5
 EE-API.c:60:5:API_draw_bitmap	3
+EE-API.c:119:5:API_read_bitmap_SD	5

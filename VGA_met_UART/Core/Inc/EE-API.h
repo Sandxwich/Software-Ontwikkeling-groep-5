@@ -11,6 +11,8 @@
 
 #include "Bitmap.h"
 
+#include "fatfs.h"
+
 /* Defines -------------------------------------------------------------------*/
 
 #define BITMAPSIZE	60

@@ -115,3 +115,58 @@ int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
 //	}
 	return error;
 }
+
+int API_read_bitmap_SD()
+{
+	FATFS FatFs;
+    FIL fil; 		//File handle
+    FRESULT fres; //Result after operations
+    FRESULT rres;
+
+    UINT i = 0;
+    //uint8_t j = 0;
+
+    fres = f_mount(&FatFs, "", 1); //1=mount now
+    if (fres != FR_OK) {
+   	printf("f_mount error (%i)\r\n", fres);
+   	while(1);
+    }
+
+
+	fres = f_open(&fil, "test.txt", FA_READ);
+	if (fres != FR_OK) {
+	printf("f_open error (%i)\r\n",fres);
+	while(1);
+	}
+	printf("I was able to open 'test.txt' for reading!\r\n");
+
+	BYTE readBuf[30];
+	i = 30;
+	while (i == 30)
+	{
+	rres = f_read(&fil,(void*)readBuf, 30, &i);
+	  if(rres == 0)
+	  {
+		printf("Read string from 'test.txt' contents: %s\r\n", readBuf);
+	  }
+	  else
+	  {
+		printf("f_gets error (%i)\r\n", fres);
+	  }
+	}
+//	while (value != 3)
+//	{
+//		fres = f_read(&fil, readBuf, 1, &i);
+//		test = f_tell(&fil);
+//		value = atoi(readBuf);
+//		printf("%d",value);
+//		j++;
+//	}
+
+
+	f_close(&fil);
+
+    f_mount(NULL, "", 0);
+
+	return 0;
+}
