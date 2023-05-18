@@ -123,15 +123,18 @@ int API_read_bitmap_SD()
     FRESULT fres; //Result after operations
     FRESULT rres;
 
+    uint16_t xp,yp = 0;
+    xp = 0;
     UINT i = 0;
-    //uint8_t j = 0;
+    unsigned char j;
+    uint k = 0; // kijken welk variable we zijn
+    unsigned char Height,Width;
 
     fres = f_mount(&FatFs, "", 1); //1=mount now
     if (fres != FR_OK) {
    	printf("f_mount error (%i)\r\n", fres);
    	while(1);
     }
-
 
 	fres = f_open(&fil, "test.txt", FA_READ);
 	if (fres != FR_OK) {
@@ -140,29 +143,57 @@ int API_read_bitmap_SD()
 	}
 	printf("I was able to open 'test.txt' for reading!\r\n");
 
-	BYTE readBuf[30];
+	char readBuf[30];
+	unsigned char test = 0;
+	unsigned char test2 = 0;
 	i = 30;
+
 	while (i == 30)
 	{
-	rres = f_read(&fil,(void*)readBuf, 30, &i);
-	  if(rres == 0)
-	  {
-		printf("Read string from 'test.txt' contents: %s\r\n", readBuf);
-	  }
-	  else
-	  {
-		printf("f_gets error (%i)\r\n", fres);
-	  }
-	}
-//	while (value != 3)
-//	{
-//		fres = f_read(&fil, readBuf, 1, &i);
-//		test = f_tell(&fil);
-//		value = atoi(readBuf);
-//		printf("%d",value);
-//		j++;
-//	}
+		rres = f_read(&fil,(void*)readBuf, 30, &i);
 
+		for (j=0; j<i; j++)
+		{
+
+			if (readBuf[j] != 32)
+			{
+				test2 = readBuf[j]-'0';
+				test *= 10;
+				test += test2;
+
+
+			}
+			else
+			{
+				if (k == 0) // Hoogte van de bit map
+				{
+					Height = test;
+				}
+				if (k == 1)
+				{
+					Width = test;
+				}
+				if (k > 1)
+				{
+					UB_VGA_SetPixel(xp, yp, test);
+					xp++;
+					if (xp >= Width)
+					{
+						yp++;
+						xp = 0;
+					}
+					if (yp == Height)
+					{
+						break;
+					}
+				}
+
+				k++;
+				test = 0;
+			}
+
+		}
+	}
 
 	f_close(&fil);
 

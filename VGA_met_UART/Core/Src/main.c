@@ -131,7 +131,7 @@ int main(void)
   UB_VGA_SetPixel(0,0,0x00);
   UB_VGA_SetPixel(319,0,0x00);
 
-  API_draw_bitmap(0,0,0);
+  //API_draw_bitmap(0,0,0);
 
 
 
