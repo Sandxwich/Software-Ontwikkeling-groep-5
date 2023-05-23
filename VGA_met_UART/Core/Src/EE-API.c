@@ -63,4 +63,179 @@ int API_clear_screen(uint8_t color)
 
 }
 
+int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
+{
+	int error = 0;
+	uint16_t xp,yp,xp2,yp2 = 0;
+	yp2=0;
+	  for(yp = 20; yp < 120; yp++)
+	  {
+	    for(xp = 0, xp2 = 0; xp < 100; xp++)
+	    {
+	      UB_VGA_SetPixel(xp, yp, bitmap[yp2][xp2]);
+	      xp2++;
+	    }
+	    yp2++;
+	  }
+
+
+//	switch (nr)
+//	{
+//
+//	case 0:	// Pijl up
+//	{
+//		//doe iets met de bitmap
+//		break;
+//	}
+//
+//	case 1:	// Pijl down
+//	{
+//
+//		break;
+//	}
+//
+//	case 2:	// Pijl Left
+//	{
+//
+//		break;
+//	}
+//
+//	case 3: // Pijl Right
+//	{
+//
+//		break;
+//	}
+//
+//	case 4: // Smiley
+//	{
+//
+//		break;
+//	}
+//
+//	case 5: // Frowney
+//	{
+//
+//		break;
+//	}
+//
+//	}
+	return error;
+}
+
+int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
+{
+
+	// Fatfs variables
+	FATFS FatFs;
+    FIL fil; 		//File handle
+    FRESULT fres; 	//Result after operations
+    UINT SizeofBuffer = 30;
+
+    //Reading buffer
+    uint k = 0; // kijken welk variable we zijn
+
+    //Position vga
+    uint16_t xp,yp,xp2,yp2;
+
+    xp2 = 0;
+    yp2 = 0;
+
+    //Information from file system
+    unsigned int Height,Width;
+
+    //Creating decimal shift register
+	unsigned int ColourFile = 0;
+	unsigned int DecimalshiftBuff = 0;
+
+
+	unsigned char i;
+
+	char readBuf[30];
+
+	TCHAR File[] = "00.txt";
+
+	File[0] = nr[0];		// checked
+	File[1] = nr[1];
+
+	xp = x_lup;
+	yp = y_lup;
+
+
+    fres = f_mount(&FatFs, "", 1); //1=mount now
+    if (fres != FR_OK) {
+   	printf("f_mount error (%i)\r\n", fres);
+   	while(1);
+    }
+
+	fres = f_open(&fil, File, FA_READ);
+	if (fres != FR_OK) {
+	printf("f_open error (%i)\r\n",fres);
+	while(1);
+	}
+
+
+	while (SizeofBuffer == 30)
+	{
+		f_read(&fil,(void*)readBuf, 30, &SizeofBuffer);
+		for (i=0; i<SizeofBuffer; i++)
+		{
+
+			if (readBuf[i] != 32)
+			{
+				DecimalshiftBuff = readBuf[i]-'0';
+				ColourFile *= 10;
+				ColourFile += DecimalshiftBuff;
+			}
+
+			else if(readBuf[i] == 32)
+			{
+				if (k > 1)
+				{
+					if (xp < VGA_DISPLAY_X && yp < VGA_DISPLAY_Y)
+					{
+						VGA_RAM1[(yp * (VGA_DISPLAY_X + 1)) + xp] = ColourFile;
+					}
+
+					UB_VGA_SetPixel(xp, yp, ColourFile);
+					xp++;
+					xp2++;
+					if (xp2 >= Width)
+					{
+						yp++;
+						yp2++;
+						xp = x_lup;
+						xp2 = 0;
+					}
+					if (yp2 == Height)
+					{
+						break;
+					}
+				}
+				else if (k == 0) // Hoogte van de bit map
+				{
+					Height = ColourFile;
+				}
+				else if (k == 1)
+				{
+					Width = ColourFile;
+				}
+
+				k++;
+				ColourFile = 0;
+			}
+
+		}
+	}
+
+	f_close(&fil);
+
+    f_mount(NULL, "", 0);
+
+	return 0;
+}
+
+int intToAscii(int number)
+{
+   return '0' + number;
+}
 
