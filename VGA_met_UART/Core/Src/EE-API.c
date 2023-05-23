@@ -116,6 +116,19 @@ int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
 	return error;
 }
 
+int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* fontnaam,uint8_t fontgrootte,char* fontstijl)
+{
+	if(strcmp(fontnaam, "arial")  == 0)
+	{
+
+	}
+	else if(strcmp(fontnaam, "consolas")  == 0)
+	{
+
+	}
+	return 0;//returns error
+}
+
 int API_read_bitmap_SD()
 {
 	FATFS FatFs;

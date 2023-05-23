@@ -154,9 +154,6 @@ int main(void)
   // Test to see if the screen reacts to UART
   unsigned char colorTest = TRUE;
 
-  API_read_bitmap_SD();
-
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
