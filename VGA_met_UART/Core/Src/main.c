@@ -126,11 +126,11 @@ int main(void)
 
   UB_VGA_Screen_Init(); // Init VGA-Screen
 
-  UB_VGA_FillScreen(VGA_COL_RED);
+  UB_VGA_FillScreen(VGA_COL_BLACK);
   UB_VGA_SetPixel(10,10,10);
   UB_VGA_SetPixel(0,0,0x00);
   UB_VGA_SetPixel(319,0,0x00);
-
+  //API_read_bitmap_SD(&input.line_rx_buffer, 0, 0);
   //API_draw_bitmap(0,0,0);
 
 
@@ -151,8 +151,10 @@ int main(void)
   // See stm32f4xx_it.c
   HAL_UART_Receive_IT(&huart2, &input.byte_buffer_rx, LINE_BUFLEN);
 
-  // Test to see if the screen reacts to UART
-  unsigned char colorTest = TRUE;
+
+  //API_read_bitmap_SD("01", 0, 0);
+
+  int j = 0;
 
   /* USER CODE END 2 */
 
@@ -164,13 +166,16 @@ int main(void)
 	  if(input.command_execute_flag == TRUE)
 	  {
 		  i = 0;
+		  API_read_bitmap_SD(&input.line_rx_buffer, 0, 0);
 
-		  Debugging = LogicLayer_Parser(&input.line_rx_buffer, LINE_BUFLEN);
+
+		  j = 0;
+		  //Debugging = LogicLayer_Parser(&input.line_rx_buffer, LINE_BUFLEN);
 
 
 		  // Do some stuff
 		  printf("yes\n");
-		  UB_VGA_FillScreen(colorTest);
+		  //UB_VGA_FillScreen(colorTest);
 
 
 		  // When finished reset the flag
