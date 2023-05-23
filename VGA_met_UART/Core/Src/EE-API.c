@@ -118,18 +118,64 @@ int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
 
 int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* fontnaam,uint8_t fontgrootte,char* fontstijl)
 {
+	uint8_t i;
+	uint16_t xd = x;
+	uint16_t yd = y;
+	uint16_t* cord_p;
+	char* letterp;
 	if(strcmp(fontnaam, "arial")  == 0)
 	{
-
+		for(i = 0; tekst[i] == ' '; i++)
+		{
+			letterp = get_letter_bitmap(ARIAL,tekst[i]);
+			switch(fontstijl)
+			{
+			case 'n':
+				cord_p = draw_normal_letter(&letterp, xd, yd);
+				xd = cord_p[0];
+				yd = cord_p[1];
+				break;
+			case 'v':
+				cord_p = draw_fat_letter(&letterp, xd, yd);
+				xd = cord_p[0];
+				yd = cord_p[1];
+				break;
+			case 'c':
+				cord_p = draw_cursife_letter(&letterp, xd, yd);
+				xd = cord_p[0];
+				yd = cord_p[1];
+				break;
+			}
+		}
 	}
 	else if(strcmp(fontnaam, "consolas")  == 0)
 	{
-
+		for(i = 0; tekst[i] == ' '; i++)
+		{
+			letterp = get_letter_bitmap(CONSOLAS,tekst[i]);
+			switch(fontstijl)
+			{
+			case 'n':
+				cord_p = draw_normal_letter(&letterp, xd, yd);
+				xd = cord_p[0];
+				yd = cord_p[1];
+				break;
+			case 'v':
+				cord_p = draw_fat_letter(&letterp, xd, yd);
+				xd = cord_p[0];
+				yd = cord_p[1];
+				break;
+			case 'c':
+				cord_p = draw_cursife_letter(&letterp, xd, yd);
+				xd = cord_p[0];
+				yd = cord_p[1];
+				break;
+			}
+		}
 	}
 	return 0;//returns error
 }
 
-int API_read_bitmap_SD()
 int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 {
 

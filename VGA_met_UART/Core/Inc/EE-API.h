@@ -14,9 +14,11 @@
 #include "fatfs.h"
 
 /* Defines -------------------------------------------------------------------*/
-
-#define BITMAPSIZE	60
-#define NRBITMAPS	6
+#define ARIAL				1
+#define CONSOLAS			2
+#define MAX_STYLE_LENGHT	7
+#define BITMAPSIZE			60
+#define NRBITMAPS			6
 
 /* Prototypes ----------------------------------------------------------------*/
 int API_draw_line(uint16_t ,uint16_t, uint16_t, uint16_t, uint8_t, uint8_t);
