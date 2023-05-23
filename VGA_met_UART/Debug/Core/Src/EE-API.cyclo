@@ -1,5 +1,8 @@
 EE-API.c:23:5:API_draw_line	5
 EE-API.c:60:5:API_draw_bitmap	3
-EE-API.c:119:5:API_draw_text	5
-EE-API.c:143:5:API_read_bitmap_SD	14
-EE-API.c:255:5:intToAscii	1
+EE-API.c:119:5:API_draw_text	13
+EE-API.c:179:12:draw_normal_letter	1
+EE-API.c:187:12:draw_cursife_letter	1
+EE-API.c:195:12:draw_fat_letter	1
+EE-API.c:203:5:API_read_bitmap_SD	14
+EE-API.c:315:5:intToAscii	1

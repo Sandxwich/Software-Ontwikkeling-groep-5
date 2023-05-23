@@ -128,20 +128,20 @@ int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* font
 		for(i = 0; tekst[i] == ' '; i++)
 		{
 			letterp = get_letter_bitmap(ARIAL,tekst[i]);
-			switch(fontstijl)
+			switch(fontstijl[0])
 			{
 			case 'n':
-				cord_p = draw_normal_letter(&letterp, xd, yd);
+				cord_p = draw_normal_letter(&letterp, xd, yd, fontgrootte, kleur);
 				xd = cord_p[0];
 				yd = cord_p[1];
 				break;
 			case 'v':
-				cord_p = draw_fat_letter(&letterp, xd, yd);
+				cord_p = draw_fat_letter(&letterp, xd, yd, fontgrootte, kleur);
 				xd = cord_p[0];
 				yd = cord_p[1];
 				break;
 			case 'c':
-				cord_p = draw_cursife_letter(&letterp, xd, yd);
+				cord_p = draw_cursife_letter(&letterp, xd, yd, fontgrootte, kleur);
 				xd = cord_p[0];
 				yd = cord_p[1];
 				break;
@@ -153,20 +153,20 @@ int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* font
 		for(i = 0; tekst[i] == ' '; i++)
 		{
 			letterp = get_letter_bitmap(CONSOLAS,tekst[i]);
-			switch(fontstijl)
+			switch(fontstijl[0])
 			{
 			case 'n':
-				cord_p = draw_normal_letter(&letterp, xd, yd);
+				cord_p = draw_normal_letter(&letterp, xd, yd, fontgrootte, kleur);
 				xd = cord_p[0];
 				yd = cord_p[1];
 				break;
 			case 'v':
-				cord_p = draw_fat_letter(&letterp, xd, yd);
+				cord_p = draw_fat_letter(&letterp, xd, yd, fontgrootte, kleur);
 				xd = cord_p[0];
 				yd = cord_p[1];
 				break;
 			case 'c':
-				cord_p = draw_cursife_letter(&letterp, xd, yd);
+				cord_p = draw_cursife_letter(&letterp, xd, yd, fontgrootte, kleur);
 				xd = cord_p[0];
 				yd = cord_p[1];
 				break;
@@ -174,6 +174,95 @@ int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* font
 		}
 	}
 	return 0;//returns error
+}
+
+uint16_t * draw_normal_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t fontgrootte, uint8_t kleur)
+{
+	uint16_t end_cords[2];
+	uint16_t* cords_p = end_cords;
+	int x_counter;
+	int y_counter;
+
+	for(y_counter = 0; y_counter == LETTER_BITMAP_HEIGHT-1; y_counter++)
+	{
+		yd++;
+		for(x_counter = 0; x_counter == LETTER_BITMAP_LENGTH-1; x_counter++)
+		{
+			xd++;
+			if(letterp[x_counter+(LETTER_BITMAP_LENGTH*y_counter)] != 255)
+			{
+				UB_VGA_SetPixel(xd, yd, kleur);
+			}
+			if(fontgrootte == SIZE_1)
+				x_counter++;
+		}
+		if(fontgrootte == SIZE_1)
+			x_counter++;
+	}
+	end_cords[0]= xd;
+	end_cords[1]= yd;
+
+	return &cords_p;
+}
+
+uint16_t * draw_cursive_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t fontgrootte, uint8_t kleur)
+{
+	uint16_t end_cords[2];
+	uint16_t* cords_p = end_cords;
+	int x_counter;
+	int y_counter;
+
+	for(y_counter = 0; y_counter == LETTER_BITMAP_HEIGHT-1; y_counter++)
+	{
+		yd++;
+		for(x_counter = 0; x_counter == LETTER_BITMAP_LENGTH-1; x_counter++)
+		{
+			xd++;
+			if(letterp[x_counter+(LETTER_BITMAP_LENGTH*y_counter)] != 255)
+			{
+				UB_VGA_SetPixel(xd, yd, kleur);
+			}
+			if(fontgrootte == SIZE_1)
+				x_counter++;
+		}
+		if(fontgrootte == SIZE_1)
+			x_counter++;
+	}
+	end_cords[0]= xd;
+	end_cords[1]= yd;
+
+	return &cords_p;
+}
+
+uint16_t * draw_fat_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t fontgrootte, uint8_t kleur)
+{
+	uint16_t end_cords[2];
+	uint16_t* cords_p = end_cords;
+	int x_counter;
+	int y_counter;
+
+	for(y_counter = 0; y_counter == LETTER_BITMAP_HEIGHT-1; y_counter++)
+	{
+		yd++;
+		for(x_counter = 0; x_counter == LETTER_BITMAP_LENGTH-1; x_counter++)
+		{
+			xd++;
+			if(letterp[x_counter+(LETTER_BITMAP_LENGTH*y_counter)] != 255)
+			{
+				UB_VGA_SetPixel(xd, yd, kleur);
+				xd++;
+				UB_VGA_SetPixel(xd, yd, kleur);//2e pixel extra op de x waarde zorgt voor een 2x zo breede leter
+			}
+			if(fontgrootte == SIZE_1)
+				x_counter++;
+		}
+		if(fontgrootte == SIZE_1)
+			x_counter++;
+	}
+	end_cords[0]= xd;
+	end_cords[1]= yd;
+
+	return &cords_p;
 }
 
 int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
