@@ -116,19 +116,44 @@ int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
 	return error;
 }
 
-int API_read_bitmap_SD()
+int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 {
+
+	// Fatfs variables
 	FATFS FatFs;
     FIL fil; 		//File handle
-    FRESULT fres; //Result after operations
-    FRESULT rres;
+    FRESULT fres; 	//Result after operations
+    UINT SizeofBuffer = 30;
 
-    uint16_t xp,yp = 0;
-    xp = 0;
-    UINT i = 0;
-    unsigned char j;
+    //Reading buffer
     uint k = 0; // kijken welk variable we zijn
+
+    //Position vga
+    uint16_t xp,yp,xp2,yp2;
+
+    xp2 = 0;
+    yp2 = 0;
+
+    //Information from file system
     unsigned int Height,Width;
+
+    //Creating decimal shift register
+	unsigned int ColourFile = 0;
+	unsigned int DecimalshiftBuff = 0;
+
+
+	unsigned char i;
+
+	char readBuf[30];
+
+	TCHAR File[] = "00.txt";
+
+	File[0] = nr[0];		// checked
+	File[1] = nr[1];
+
+	xp = x_lup;
+	yp = y_lup;
+
 
     fres = f_mount(&FatFs, "", 1); //1=mount now
     if (fres != FR_OK) {
@@ -136,57 +161,61 @@ int API_read_bitmap_SD()
    	while(1);
     }
 
-	fres = f_open(&fil, "test.txt", FA_READ);
+	fres = f_open(&fil, File, FA_READ);
 	if (fres != FR_OK) {
 	printf("f_open error (%i)\r\n",fres);
 	while(1);
 	}
 
-	char readBuf[30];
-	unsigned int test = 0;
-	unsigned int test2 = 0;
-	i = 30;
 
-	while (i == 30)
+	while (SizeofBuffer == 30)
 	{
-		rres = f_read(&fil,(void*)readBuf, 30, &i);
-
-		for (j=0; j<i; j++)
+		f_read(&fil,(void*)readBuf, 30, &SizeofBuffer);
+		for (i=0; i<SizeofBuffer; i++)
 		{
 
-			if (readBuf[j] != 32)
+			if (readBuf[i] != 32)
 			{
-				test2 = readBuf[j]-'0';
-				test *= 10;
-				test += test2;
+				DecimalshiftBuff = readBuf[i]-'0';
+				ColourFile *= 10;
+				ColourFile += DecimalshiftBuff;
 			}
-			else
+
+			else if(readBuf[i] == 32)
 			{
-				if (k == 0) // Hoogte van de bit map
-				{
-					Height = test;
-				}
-				if (k == 1)
-				{
-					Width = test;
-				}
 				if (k > 1)
 				{
-					UB_VGA_SetPixel(xp, yp, (unsigned char)test);
+					if (xp < VGA_DISPLAY_X && yp < VGA_DISPLAY_Y)
+					{
+						VGA_RAM1[(yp * (VGA_DISPLAY_X + 1)) + xp] = ColourFile;
+					}
+
+					UB_VGA_SetPixel(xp, yp, ColourFile);
 					xp++;
-					if (xp == Width)
+					xp2++;
+					if (xp2 >= Width)
 					{
 						yp++;
-						xp = 0;
+						yp2++;
+						xp = x_lup;
+						xp2 = 0;
 					}
-					if (yp == Height-1)
+					if (yp2 == Height)
 					{
 						break;
 					}
 				}
+				else if (k == 0) // Hoogte van de bit map
+				{
+					Height = ColourFile;
+				}
+				else if (k == 1)
+				{
+					Width = ColourFile;
+				}
 
 				k++;
-				test = 0;
+				ColourFile = 0;
 			}
 
 		}
@@ -198,3 +227,9 @@ int API_read_bitmap_SD()
 
 	return 0;
 }
+
+int intToAscii(int number)
+{
+   return '0' + number;
+}
+

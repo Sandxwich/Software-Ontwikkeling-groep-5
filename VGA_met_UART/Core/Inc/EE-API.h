@@ -23,6 +23,8 @@ int API_draw_line(uint16_t ,uint16_t, uint16_t, uint16_t, uint8_t, uint8_t);
 
 int API_draw_bitmap(uint16_t, uint16_t, uint16_t);
 
+int API_read_bitmap_SD(char*, uint16_t, uint16_t);
+
 #ifdef __cplusplus
 }
 #endif
