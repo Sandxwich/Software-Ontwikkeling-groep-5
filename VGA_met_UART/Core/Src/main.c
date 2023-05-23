@@ -127,11 +127,9 @@ int main(void)
   UB_VGA_Screen_Init(); // Init VGA-Screen
 
   UB_VGA_FillScreen(VGA_COL_BLACK);
-  UB_VGA_SetPixel(10,10,10);
-  UB_VGA_SetPixel(0,0,0x00);
-  UB_VGA_SetPixel(319,0,0x00);
   //API_read_bitmap_SD(&input.line_rx_buffer, 0, 0);
   //API_draw_bitmap(0,0,0);
+  API_draw_rectangle(30, 20, 40, 30, VGA_COL_BLUE, 0);
 
 
 
@@ -252,6 +250,12 @@ USART_PRINTF
 
 
 /* USER CODE END 4 */
+
+/* USER CODE BEGIN 5 */
+
+
+
+/* USER CODE END 5 */
 
 /**
   * @brief  This function is executed in case of error occurrence.

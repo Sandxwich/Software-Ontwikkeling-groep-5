@@ -1,4 +1,6 @@
 EE-API.c:23:5:API_draw_line	5
-EE-API.c:60:5:API_draw_bitmap	3
-EE-API.c:119:5:API_read_bitmap_SD	14
-EE-API.c:231:5:intToAscii	1
+EE-API.c:60:5:API_clear_screen	1
+EE-API.c:68:5:API_draw_rectangle	11
+EE-API.c:105:5:API_draw_bitmap	3
+EE-API.c:164:5:API_read_bitmap_SD	14
+EE-API.c:276:5:intToAscii	1

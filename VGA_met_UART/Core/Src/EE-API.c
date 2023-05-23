@@ -63,6 +63,45 @@ int API_clear_screen(uint8_t color)
 
 }
 
+
+
+int API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16_t hoogte, uint8_t color, uint8_t gevuld)
+{
+	int xp = 0;
+	int yp = 0;
+
+	if(gevuld == 1)
+	{
+		for(yp = y_lup; yp < y_lup + hoogte; yp++)
+		{
+			for(xp = x_lup; xp < x_lup + breedte; xp++)
+			{
+				UB_VGA_SetPixel(xp, yp, color);
+			}
+		}
+	}
+
+	else if(gevuld == 0)
+	{
+
+			for(yp = y_lup; yp <= y_lup + hoogte; yp++)
+			{
+				for(xp = x_lup; xp <= x_lup + breedte; xp++)
+				{
+					if ((yp == y_lup) || (yp == (y_lup + hoogte)))
+					{
+						UB_VGA_SetPixel(xp, yp, color);
+					}
+
+					else if((xp == x_lup) || (xp == (x_lup + breedte)))
+					{
+						UB_VGA_SetPixel(xp, yp, color);
+					}
+				}
+			}
+	}
+}
+
 int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
 {
 	int error = 0;
