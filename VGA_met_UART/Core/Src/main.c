@@ -133,6 +133,7 @@ int main(void)
   API_draw_line(1, 1, 101, 101, 5, VGA_COL_WHITE);
   //API_read_bitmap_SD(&input.line_rx_buffer, 0, 0);
   //API_draw_bitmap(0,0,0);
+  API_draw_circle(100, 100, 40, VGA_COL_WHITE);
 
 
 
@@ -269,6 +270,12 @@ USART_PRINTF
 
 
 /* USER CODE END 4 */
+
+/* USER CODE BEGIN 5 */
+
+
+
+/* USER CODE END 5 */
 
 /**
   * @brief  This function is executed in case of error occurrence.
