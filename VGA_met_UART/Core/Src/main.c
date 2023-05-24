@@ -130,6 +130,7 @@ int main(void)
   UB_VGA_SetPixel(10,10,10);
   UB_VGA_SetPixel(0,0,0x00);
   UB_VGA_SetPixel(319,0,0x00);
+  API_draw_line(1, 1, 101, 101, 5, VGA_COL_WHITE);
   //API_read_bitmap_SD(&input.line_rx_buffer, 0, 0);
   //API_draw_bitmap(0,0,0);
 
@@ -156,6 +157,8 @@ int main(void)
 
   int j = 0;
 
+  int Test = 0;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -166,11 +169,20 @@ int main(void)
 	  if(input.command_execute_flag == TRUE)
 	  {
 		  i = 0;
-		  API_read_bitmap_SD(&input.line_rx_buffer, 0, 0);
+	//	  API_read_bitmap_SD(&input.line_rx_buffer, j, 0);
+		  Debugging = LogicLayer_Parser(input.line_rx_buffer, LINE_BUFLEN);
+		  Test = LogicLayer_CommandCheck(Debugging);
+		  if (Test == 0)
+		  {
+			  //error handler
+		  }
+		  else
+		  {
+			  LogicLayer_CommandSwitch(Test, Debugging);
+		  }
 
+		  j+= 160;
 
-		  j = 0;
-		  //Debugging = LogicLayer_Parser(&input.line_rx_buffer, LINE_BUFLEN);
 
 
 		  // Do some stuff

@@ -1,13 +1,19 @@
 
 #ifndef __Logic_Layer_H
 #define __Logic_Layer_H
+
 #ifdef __cplusplus
  extern "C" {
 #endif
 
-#include "main.h"
+
+#include "string.h"
+#include "Parser.h"
+
 
 #define BUFFER_LEN 20
+
+
 
 
  typedef struct
@@ -18,7 +24,18 @@
 
  extern Message_parser Debugging;
 
+
+
+
+
+
 Message_parser LogicLayer_Parser(char*, unsigned int);
+
+int LogicLayer_CommandCheck(Message_parser);
+
+int LogicLayer_CommandSwitch(unsigned char, Message_parser);
+
+int LogicLayer_ColourCheck(Message_parser*, unsigned char);
 
 
 #ifdef __cplusplus

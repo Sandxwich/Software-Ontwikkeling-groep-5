@@ -25,6 +25,8 @@ int API_draw_bitmap(uint16_t, uint16_t, uint16_t);
 
 int API_read_bitmap_SD(char*, uint16_t, uint16_t);
 
+int intToAscii(Message_parser*, int , int );
+
 #ifdef __cplusplus
 }
 #endif

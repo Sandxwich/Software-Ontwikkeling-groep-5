@@ -228,8 +228,19 @@ int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 	return 0;
 }
 
-int intToAscii(int number)
+int intToAscii(Message_parser* localParser, int numbersize, int StructLocation)
 {
-   return '0' + number;
+	char i = 0;
+	char DecimalshiftBuff = 0;
+	unsigned int decimalvalue = 0;
+	for (i = 0; i < numbersize; i++)
+	{
+		DecimalshiftBuff = localParser->Parser_Message[StructLocation][i]-'0';
+		decimalvalue *= 10;
+		decimalvalue += DecimalshiftBuff;
+	}
+	return decimalvalue;
 }
+
+
 

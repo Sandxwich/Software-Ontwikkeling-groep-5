@@ -1,1 +1,4 @@
-Logic_Layer.c:8:16:LogicLayer_Parser	8
+Logic_Layer.c:9:16:LogicLayer_Parser	8
+Logic_Layer.c:64:5:LogicLayer_CommandCheck	4
+Logic_Layer.c:88:5:LogicLayer_CommandSwitch	4
+Logic_Layer.c:146:5:LogicLayer_ColourCheck	3
