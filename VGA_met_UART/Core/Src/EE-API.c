@@ -184,7 +184,6 @@ uint16_t * draw_normal_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t f
         xd = begin_x;
         for (x_counter = 0; x_counter < LETTER_BITMAP_LENGTH-1; x_counter++) //goes trough every horizontal layer of the bitmap
         {
-        	if (t[x_counter + (LETTER_BITMAP_LENGTH * y_counter)]
             if ( holder != 255)//checks if a pixel needs to be placed (background bitmap is white)
             {
                 UB_VGA_SetPixel(xd, yd, kleur);
