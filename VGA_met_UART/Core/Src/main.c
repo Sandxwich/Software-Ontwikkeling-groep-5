@@ -129,7 +129,7 @@ int main(void)
   UB_VGA_FillScreen(VGA_COL_BLACK);
   //API_read_bitmap_SD(&input.line_rx_buffer, 0, 0);
   //API_draw_bitmap(0,0,0);
-  API_draw_rectangle(30, 20, 40, 30, VGA_COL_BLUE, 0);
+  API_draw_circle(100, 100, 40, VGA_COL_WHITE);
 
 
 

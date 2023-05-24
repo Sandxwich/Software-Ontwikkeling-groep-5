@@ -70,6 +70,7 @@ int API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16_
 	int xp = 0;
 	int yp = 0;
 
+	//draw lines along screen every y-value
 	if(gevuld == 1)
 	{
 		for(yp = y_lup; yp < y_lup + hoogte; yp++)
@@ -88,11 +89,13 @@ int API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16_
 			{
 				for(xp = x_lup; xp <= x_lup + breedte; xp++)
 				{
+					//draw lines along screen every y-value
 					if ((yp == y_lup) || (yp == (y_lup + hoogte)))
 					{
 						UB_VGA_SetPixel(xp, yp, color);
 					}
 
+					//Draw pixels along screen only at edges
 					else if((xp == x_lup) || (xp == (x_lup + breedte)))
 					{
 						UB_VGA_SetPixel(xp, yp, color);
@@ -100,6 +103,60 @@ int API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16_
 				}
 			}
 	}
+}
+
+
+//int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
+//{
+//	int i;
+//	int j;
+//	int rads;
+//	int rad = 0;
+//	int x_c2 = x_c;
+//	int y_c2 = y_c;
+//
+//
+//
+//	for (j = 0; j <= radius * 2; j++)
+//	{
+//		for(i = 0; i <= radius * 2; i++)
+//		{
+//			rads = (pow(i, 2) + pow(j, 2));
+//			rad = sqrt(rads);
+//
+//			if(rad == radius)
+//			{
+//				UB_VGA_SetPixel((x_c2 - radius + i), (y_c2 - radius + j), color);
+//			}
+//			x_c++;
+//		}
+//		x_c = x_c2;
+//		y_c++;
+//	}
+//
+//}
+
+int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
+{
+    int i;
+    int j;
+    int rads;
+    int rad = 0;
+
+
+    for (j = -radius; j <= radius; j++)
+    {
+        for (i = -radius; i <= radius; i++)
+        {
+            rads = (pow(i, 2) + pow(j, 2));
+            rad = sqrt(rads);
+
+            if (rad == radius)
+            {
+                UB_VGA_SetPixel((x_c + i), (y_c + j), color);
+            }
+        }
+    }
 }
 
 int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)

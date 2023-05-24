@@ -13,10 +13,13 @@
 
 #include "fatfs.h"
 
+#include <math.h>
+
 /* Defines -------------------------------------------------------------------*/
 
 #define BITMAPSIZE	60
 #define NRBITMAPS	6
+#define PI			3.14159265359
 
 /* Prototypes ----------------------------------------------------------------*/
 int API_draw_line(uint16_t ,uint16_t, uint16_t, uint16_t, uint8_t, uint8_t);
@@ -26,6 +29,8 @@ int API_draw_bitmap(uint16_t, uint16_t, uint16_t);
 int API_read_bitmap_SD(char*, uint16_t, uint16_t);
 
 int API_draw_rectangle(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t, uint8_t);
+
+int API_draw_circle(uint16_t , uint16_t , uint16_t , uint8_t);
 
 #ifdef __cplusplus
 }
