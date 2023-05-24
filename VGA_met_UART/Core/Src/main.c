@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h> //for va_list var arg functions
-
+#include <EE-API.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -151,9 +151,14 @@ int main(void)
   // We will pass it an array, but we will not use it. We declare our own variable in the interupt handler
   // See stm32f4xx_it.c
   HAL_UART_Receive_IT(&huart2, &input.byte_buffer_rx, LINE_BUFLEN);
-
-
   //API_read_bitmap_SD("01", 0, 0);
+  char test[] = "tot ";
+  char test_naam[] = "arial";
+  char test_style[] = "normaal";
+  char* tekst = test;
+  char* fontnaam = test_naam;
+  char* fontstijl = test_style;
+  API_draw_text(20, 120, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
 
   int j = 0;
 
