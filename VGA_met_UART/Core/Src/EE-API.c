@@ -2,7 +2,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "EE-API.h"
 
-
+char t[] = {255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,174,191,255,255,255,255,255,255,255,213,64,1,191,255,255,255,255,255,255,255,209,0,1,191,255,255,255,255,255,255,255,209,0,1,191,255,255,255,255,255,255,255,209,0,1,191,255,255,255,255,255,245,0,0,0,0,0,0,119,255,255,255,245,0,0,0,0,0,0,119,255,255,255,255,255,209,0,1,191,255,255,255,255,255,255,255,209,0,1,191,255,255,255,255,255,255,255,209,0,1,191,255,255,255,255,255,255,255,209,0,1,191,255,255,255,255,255,255,255,209,0,1,191,255,255,255,255,255,255,255,209,0,1,191,255,255,255,255,255,255,255,209,0,1,191,255,255,255,255,255,255,255,209,0,1,191,255,255,255,255,255,255,255,209,0,1,191,255,255,255,255,255,255,255,209,0,1,191,255,255,255,255,255,255,255,245,0,1,155,255,255,255,255,255,255,255,250,64,0,0,0,83,255,255,255,255,255,255,213,64,0,0,83,255,255,255,255,255,255,255,255,255,255,255,255,255};
+char o[] = {255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,250,104,0,0,9,187,255,255,255,255,245,64,0,0,0,0,1,155,255,255,255,136,0,119,255,255,209,0,10,223,255,250,64,14,255,255,255,255,172,1,155,255,250,64,119,255,255,255,255,245,1,155,255,250,64,119,255,255,255,255,245,1,155,255,250,64,14,255,255,255,255,172,1,155,255,255,136,0,119,255,255,209,0,10,223,255,255,245,64,0,0,0,0,1,155,255,255,255,255,250,104,0,0,9,187,255,255,255,255,255,255,255,255,255,255,255,255,255,255};
 /*
  * int API_draw_line(int x_1, y_1, x_2, y2, color, dikte)
  *
@@ -57,6 +58,108 @@ int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_
 	return error;
 }
 
+int API_clear_screen(uint8_t color)
+{
+	UB_VGA_FillScreen(color);
+
+}
+
+
+
+int API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16_t hoogte, uint8_t color, uint8_t gevuld)
+{
+	int xp = 0;
+	int yp = 0;
+
+	//draw lines along screen every y-value
+	if(gevuld == 1)
+	{
+		for(yp = y_lup; yp < y_lup + hoogte; yp++)
+		{
+			for(xp = x_lup; xp < x_lup + breedte; xp++)
+			{
+				UB_VGA_SetPixel(xp, yp, color);
+			}
+		}
+	}
+
+	else if(gevuld == 0)
+	{
+
+			for(yp = y_lup; yp <= y_lup + hoogte; yp++)
+			{
+				for(xp = x_lup; xp <= x_lup + breedte; xp++)
+				{
+					//draw lines along screen every y-value
+					if ((yp == y_lup) || (yp == (y_lup + hoogte)))
+					{
+						UB_VGA_SetPixel(xp, yp, color);
+					}
+
+					//Draw pixels along screen only at edges
+					else if((xp == x_lup) || (xp == (x_lup + breedte)))
+					{
+						UB_VGA_SetPixel(xp, yp, color);
+					}
+				}
+			}
+	}
+}
+
+
+//int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
+//{
+//	int i;
+//	int j;
+//	int rads;
+//	int rad = 0;
+//	int x_c2 = x_c;
+//	int y_c2 = y_c;
+//
+//
+//
+//	for (j = 0; j <= radius * 2; j++)
+//	{
+//		for(i = 0; i <= radius * 2; i++)
+//		{
+//			rads = (pow(i, 2) + pow(j, 2));
+//			rad = sqrt(rads);
+//
+//			if(rad == radius)
+//			{
+//				UB_VGA_SetPixel((x_c2 - radius + i), (y_c2 - radius + j), color);
+//			}
+//			x_c++;
+//		}
+//		x_c = x_c2;
+//		y_c++;
+//	}
+//
+//}
+
+int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
+{
+    int i;
+    int j;
+    int rads;
+    int rad = 0;
+
+
+    for (j = -radius; j <= radius; j++)
+    {
+        for (i = -radius; i <= radius; i++)
+        {
+            rads = (pow(i, 2) + pow(j, 2));
+            rad = sqrt(rads);
+
+            if (rad == radius)
+            {
+                UB_VGA_SetPixel((x_c + i), (y_c + j), color);
+            }
+        }
+    }
+}
+
 int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
 {
 	int error = 0;
@@ -66,12 +169,13 @@ int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
 	  {
 	    for(xp = 0, xp2 = 0; xp < 100; xp++)
 	    {
-	      UB_VGA_SetPixel(xp, yp, bitmap[yp2][xp2]);
+	      //UB_VGA_SetPixel(xp, yp, bitmap[yp2][xp2]);
 	      xp2++;
 	    }
 	    yp2++;
 	  }
-
+	  return error;
+}
 
 //	switch (nr)
 //	{
@@ -113,7 +217,165 @@ int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
 //	}
 //
 //	}
-	return error;
+//	return error;
+//}
+
+int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* fontnaam,uint8_t fontgrootte,char* fontstijl)
+{
+	uint8_t i;
+	uint16_t xd = x;
+	uint16_t yd = y;
+	uint16_t* cord_p;
+	char* letterp;
+	if(strcmp(fontnaam, "arial")  == 0)
+	{
+		for(i = 0; tekst[i] != ' '; i++)
+		{
+			letterp = get_letter_bitmap(ARIAL,tekst[i], letterp);
+			switch(fontstijl[0])
+			{
+			case 'n':
+				cord_p = draw_normal_letter(letterp, xd, yd, fontgrootte, kleur, cord_p);
+				xd = cord_p;
+				break;
+			case 'v':
+				cord_p = draw_fat_letter(letterp, xd, yd, fontgrootte, kleur, cord_p);
+				xd = cord_p;
+				break;
+			case 'c':
+				cord_p = draw_cursive_letter(letterp, xd, yd, fontgrootte, kleur, cord_p);
+				xd = cord_p;
+				break;
+			}
+		}
+	}
+	else if(strcmp(fontnaam, "consolas")  == 0)
+	{
+		for(i = 0; tekst[i] == ' '; i++)
+		{
+			letterp = get_letter_bitmap(CONSOLAS,tekst[i], letterp);
+			switch(fontstijl[0])
+			{
+			case 'n':
+				cord_p = draw_normal_letter(&letterp, xd, yd, fontgrootte, kleur, cord_p);
+				xd = cord_p;
+				break;
+			case 'v':
+				cord_p = draw_fat_letter(&letterp, xd, yd, fontgrootte, kleur, cord_p);
+				xd = cord_p;
+				break;
+			case 'c':
+				cord_p = draw_cursive_letter(&letterp, xd, yd, fontgrootte, kleur, cord_p);
+				xd = cord_p;
+				break;
+			}
+		}
+	}
+	return 0;//returns error
+}
+
+uint16_t * draw_normal_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t fontgrootte, uint8_t kleur, uint16_t* cord_p)
+{
+    uint16_t end_cords;
+    uint16_t begin_x = xd;
+    int x_counter;
+    int y_counter;
+    char holder; //for testing only
+    for (y_counter = 0; y_counter < LETTER_BITMAP_HEIGHT-1; y_counter++) //goes trough every vertical layer of the bitmap
+    {
+        xd = begin_x;
+        for (x_counter = 0; x_counter < LETTER_BITMAP_LENGTH-1; x_counter++) //goes trough every horizontal layer of the bitmap
+        {
+            if ( holder != 255)//checks if a pixel needs to be placed (background bitmap is white)
+            {
+                UB_VGA_SetPixel(xd, yd, kleur);
+            }
+            xd++;
+            if (fontgrootte == SIZE_1) //skips one pixel of bitmap to shorten the letter by half
+                x_counter++;
+        }
+        yd++;
+        if (fontgrootte == SIZE_1)//skips one pixel of bitmap to shorten the letter by half
+            y_counter++;
+    }
+    end_cords = xd;
+    cord_p = end_cords;
+    return cord_p;
+}
+
+uint16_t * draw_cursive_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t fontgrootte, uint8_t kleur, uint16_t* cord_p)
+{
+	uint16_t end_cords[2];
+	uint16_t begin_x = xd;
+	int x_counter;
+	int y_counter;
+	int angle = LETTER_BITMAP_LENGTH; //sets angle offset for cursive letter
+	if(fontgrootte == SIZE_1)
+		angle = angle/2;
+
+	for(y_counter = 0; y_counter < LETTER_BITMAP_HEIGHT-1; y_counter++)
+	{
+		xd = begin_x;
+		for(x_counter = 0; x_counter < LETTER_BITMAP_LENGTH-1; x_counter++)
+		{
+			if(letterp[x_counter+(LETTER_BITMAP_LENGTH*y_counter)] != 255)
+			{
+				UB_VGA_SetPixel(xd+angle, yd, kleur);
+			}
+			xd++;
+			if(fontgrootte == SIZE_1)
+				x_counter++;
+		}
+		angle--; //decreases ofset for each y layer to create an angle
+		yd++;
+		if(fontgrootte == SIZE_1)
+			y_counter++;
+	}
+    end_cords[0] = xd;
+    end_cords[1] = yd;
+    cord_p[0] = end_cords[0];
+	cord_p[1] = end_cords[1];
+    return cord_p;
+}
+
+
+uint16_t * draw_fat_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t fontgrootte, uint8_t kleur, uint16_t* cord_p)
+{
+	uint16_t end_cords[2];
+	uint16_t begin_x = xd;
+	int x_counter;
+	int y_counter;
+
+	for(y_counter = 0; y_counter == LETTER_BITMAP_HEIGHT-1; y_counter++)
+	{
+		xd = begin_x;
+		for(x_counter = 0; x_counter == LETTER_BITMAP_LENGTH-1; x_counter++)
+		{
+			if(letterp[x_counter+(LETTER_BITMAP_LENGTH*y_counter)] != 255)
+			{
+				UB_VGA_SetPixel(xd, yd, kleur);
+				xd++;
+				UB_VGA_SetPixel(xd, yd, kleur);//2e pixel extra op de x waarde zorgt voor een 2x zo breede leter
+			}
+			if(fontgrootte == SIZE_1)
+				x_counter++;
+			xd++;
+		}
+		yd++;
+		if(fontgrootte == SIZE_1)
+			y_counter++;
+	}
+    end_cords[0] = xd;
+    end_cords[1] = yd;
+    cord_p[0] = end_cords[0];
+	cord_p[1] = end_cords[1];
+    return cord_p;
+}
+
+char * get_letter_bitmap(char type,char letter,char* letterp)
+{
+		letterp[0] = t[0];
+	return letterp;
 }
 
 int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)

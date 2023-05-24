@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h> //for va_list var arg functions
-
+#include <EE-API.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -134,6 +134,7 @@ int main(void)
   API_draw_line(1, 1, 100, 100, 4, VGA_COL_GRAY);
   //API_read_bitmap_SD(&input.line_rx_buffer, 0, 0);
   //API_draw_bitmap(0,0,0);
+  API_draw_circle(100, 100, 40, VGA_COL_WHITE);
 
 
 
@@ -152,9 +153,14 @@ int main(void)
   // We will pass it an array, but we will not use it. We declare our own variable in the interupt handler
   // See stm32f4xx_it.c
   HAL_UART_Receive_IT(&huart2, &input.byte_buffer_rx, LINE_BUFLEN);
-
-
   //API_read_bitmap_SD("01", 0, 0);
+  char test[] = "tot ";
+  char test_naam[] = "arial";
+  char test_style[] = "normaal";
+  char* tekst = test;
+  char* fontnaam = test_naam;
+  char* fontstijl = test_style;
+  API_draw_text(20, 120, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
 
   int j = 0;
 
@@ -265,6 +271,12 @@ USART_PRINTF
 
 
 /* USER CODE END 4 */
+
+/* USER CODE BEGIN 5 */
+
+
+
+/* USER CODE END 5 */
 
 /**
   * @brief  This function is executed in case of error occurrence.
