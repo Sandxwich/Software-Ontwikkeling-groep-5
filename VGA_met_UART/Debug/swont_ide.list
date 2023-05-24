@@ -2223,13 +2223,14 @@ int main(void)
  8001414:	2100      	movs	r1, #0
  8001416:	f240 103f 	movw	r0, #319	; 0x13f
  800141a:	f000 fe03 	bl	8002024 <UB_VGA_SetPixel>
-  API_draw_line(1, 1, 101, 101, 5, VGA_COL_WHITE);
- 800141e:	23ff      	movs	r3, #255	; 0xff
+
+  API_draw_line(1, 1, 100, 100, 4, VGA_COL_GRAY);
+ 800141e:	236d      	movs	r3, #109	; 0x6d
  8001420:	9301      	str	r3, [sp, #4]
- 8001422:	2305      	movs	r3, #5
+ 8001422:	2304      	movs	r3, #4
  8001424:	9300      	str	r3, [sp, #0]
- 8001426:	2365      	movs	r3, #101	; 0x65
- 8001428:	2265      	movs	r2, #101	; 0x65
+ 8001426:	2364      	movs	r3, #100	; 0x64
+ 8001428:	2264      	movs	r2, #100	; 0x64
  800142a:	2101      	movs	r1, #1
  800142c:	2001      	movs	r0, #1
  800142e:	f7ff fac5 	bl	80009bc <API_draw_line>

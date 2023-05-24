@@ -130,7 +130,8 @@ int main(void)
   UB_VGA_SetPixel(10,10,10);
   UB_VGA_SetPixel(0,0,0x00);
   UB_VGA_SetPixel(319,0,0x00);
-  API_draw_line(1, 1, 101, 101, 5, VGA_COL_WHITE);
+
+  API_draw_line(1, 1, 100, 100, 4, VGA_COL_GRAY);
   //API_read_bitmap_SD(&input.line_rx_buffer, 0, 0);
   //API_draw_bitmap(0,0,0);
 

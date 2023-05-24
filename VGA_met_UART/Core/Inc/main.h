@@ -42,6 +42,7 @@ extern "C" {
 #include "stm32_ub_vga_screen.h"
 
 #include "Logic_Layer.h"
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
