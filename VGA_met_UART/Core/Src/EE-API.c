@@ -133,15 +133,15 @@ int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* font
 			switch(fontstijl[0])
 			{
 			case 'n':
-				cord_p = draw_normal_letter(letterp, xd, yd, fontgrootte, kleur, cord_p);
+				cord_p = draw_normal_letter(tekst[i], xd, yd, fontgrootte, kleur, cord_p);
 				xd = cord_p;
 				break;
 			case 'v':
-				cord_p = draw_fat_letter(letterp, xd, yd, fontgrootte, kleur, cord_p);
+				cord_p = draw_fat_letter(tekst[i], xd, yd, fontgrootte, kleur, cord_p);
 				xd = cord_p;
 				break;
 			case 'c':
-				cord_p = draw_cursive_letter(letterp, xd, yd, fontgrootte, kleur, cord_p);
+				cord_p = draw_cursive_letter(tekst[i], xd, yd, fontgrootte, kleur, cord_p);
 				xd = cord_p;
 				break;
 			}
@@ -155,15 +155,15 @@ int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* font
 			switch(fontstijl[0])
 			{
 			case 'n':
-				cord_p = draw_normal_letter(&letterp, xd, yd, fontgrootte, kleur, cord_p);
+				cord_p = draw_normal_letter(letterp, xd, yd, fontgrootte, kleur, cord_p);
 				xd = cord_p;
 				break;
 			case 'v':
-				cord_p = draw_fat_letter(&letterp, xd, yd, fontgrootte, kleur, cord_p);
+				cord_p = draw_fat_letter(letterp, xd, yd, fontgrootte, kleur, cord_p);
 				xd = cord_p;
 				break;
 			case 'c':
-				cord_p = draw_cursive_letter(&letterp, xd, yd, fontgrootte, kleur, cord_p);
+				cord_p = draw_cursive_letter(letterp, xd, yd, fontgrootte, kleur, cord_p);
 				xd = cord_p;
 				break;
 			}
@@ -184,7 +184,11 @@ uint16_t * draw_normal_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t f
         xd = begin_x;
         for (x_counter = 0; x_counter < LETTER_BITMAP_LENGTH-1; x_counter++) //goes trough every horizontal layer of the bitmap
         {
-            if ( holder != 255)//checks if a pixel needs to be placed (background bitmap is white)
+        	if(letterp == 't')
+        		holder = t[x_counter+(LETTER_BITMAP_LENGTH*y_counter)];
+			if(letterp == 'o')
+				holder = o[x_counter+(LETTER_BITMAP_LENGTH*y_counter)];
+            if (holder != 255)//checks if a pixel needs to be placed (background bitmap is white)
             {
                 UB_VGA_SetPixel(xd, yd, kleur);
             }
@@ -203,11 +207,12 @@ uint16_t * draw_normal_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t f
 
 uint16_t * draw_cursive_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t fontgrootte, uint8_t kleur, uint16_t* cord_p)
 {
-	uint16_t end_cords[2];
+	uint16_t end_cords;
 	uint16_t begin_x = xd;
 	int x_counter;
 	int y_counter;
 	int angle = LETTER_BITMAP_LENGTH; //sets angle offset for cursive letter
+	char holder; //for testing only
 	if(fontgrootte == SIZE_1)
 		angle = angle/2;
 
@@ -216,7 +221,11 @@ uint16_t * draw_cursive_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t 
 		xd = begin_x;
 		for(x_counter = 0; x_counter < LETTER_BITMAP_LENGTH-1; x_counter++)
 		{
-			if(letterp[x_counter+(LETTER_BITMAP_LENGTH*y_counter)] != 255)
+			if(letterp == 't')
+				holder = t[x_counter+(LETTER_BITMAP_LENGTH*y_counter)];
+			if(letterp == 'o')
+				holder = o[x_counter+(LETTER_BITMAP_LENGTH*y_counter)];
+			if (holder != 255)//checks if a pixel needs to be placed (background bitmap is white)
 			{
 				UB_VGA_SetPixel(xd+angle, yd, kleur);
 			}
@@ -224,32 +233,34 @@ uint16_t * draw_cursive_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t 
 			if(fontgrootte == SIZE_1)
 				x_counter++;
 		}
-		angle--; //decreases ofset for each y layer to create an angle
+		angle--; //decreases offset for each y layer to create an angle
 		yd++;
 		if(fontgrootte == SIZE_1)
 			y_counter++;
 	}
-    end_cords[0] = xd;
-    end_cords[1] = yd;
-    cord_p[0] = end_cords[0];
-	cord_p[1] = end_cords[1];
+	end_cords = xd;
+	cord_p = end_cords;
     return cord_p;
 }
 
 
 uint16_t * draw_fat_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t fontgrootte, uint8_t kleur, uint16_t* cord_p)
 {
-	uint16_t end_cords[2];
+	uint16_t end_cords;
 	uint16_t begin_x = xd;
 	int x_counter;
 	int y_counter;
-
-	for(y_counter = 0; y_counter == LETTER_BITMAP_HEIGHT-1; y_counter++)
+	char holder;
+	for(y_counter = 0; y_counter < LETTER_BITMAP_HEIGHT-1; y_counter++)
 	{
 		xd = begin_x;
-		for(x_counter = 0; x_counter == LETTER_BITMAP_LENGTH-1; x_counter++)
+		for(x_counter = 0; x_counter < LETTER_BITMAP_LENGTH-1; x_counter++)
 		{
-			if(letterp[x_counter+(LETTER_BITMAP_LENGTH*y_counter)] != 255)
+			if(letterp == 't')
+				holder = t[x_counter+(LETTER_BITMAP_LENGTH*y_counter)];
+			if(letterp == 'o')
+				holder = o[x_counter+(LETTER_BITMAP_LENGTH*y_counter)];
+			if (holder != 255)//checks if a pixel needs to be placed (background bitmap is white)
 			{
 				UB_VGA_SetPixel(xd, yd, kleur);
 				xd++;
@@ -263,10 +274,8 @@ uint16_t * draw_fat_letter(char** letterp, uint16_t xd, uint16_t yd,uint8_t font
 		if(fontgrootte == SIZE_1)
 			y_counter++;
 	}
-    end_cords[0] = xd;
-    end_cords[1] = yd;
-    cord_p[0] = end_cords[0];
-	cord_p[1] = end_cords[1];
+	end_cords = xd;
+	cord_p = end_cords;
     return cord_p;
 }
 

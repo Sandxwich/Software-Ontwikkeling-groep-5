@@ -153,11 +153,16 @@ int main(void)
   //API_read_bitmap_SD("01", 0, 0);
   char test[] = "tot ";
   char test_naam[] = "arial";
-  char test_style[] = "normaal";
+  char test_style[] = "vet";
   char* tekst = test;
   char* fontnaam = test_naam;
   char* fontstijl = test_style;
   API_draw_text(20, 120, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
+  test_style[0] = 'c';
+  API_draw_text(20, 90, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
+  test_style[0] = 'n';
+  API_draw_text(20, 50, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
+
 
   int j = 0;
 

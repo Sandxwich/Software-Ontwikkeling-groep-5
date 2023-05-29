@@ -24,7 +24,7 @@
 #define NRBITMAPS				6
 
 /* Prototypes ----------------------------------------------------------------*/
- uint16_t * draw_normal_letter(char*, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
+ uint16_t * draw_normal_letter(char**, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
 
 uint16_t * draw_cursive_letter(char** , uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
 
