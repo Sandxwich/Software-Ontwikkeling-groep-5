@@ -122,7 +122,7 @@ int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* font
 	uint16_t xd = x;
 	uint16_t yd = y;
 	uint16_t* cord_p;
-		for(i = 0; tekst[i] != ' '; i++)
+		for(i = 0; tekst[i] != '\0'; i++)
 		{
 			switch(fontstijl[0])
 			{
@@ -152,8 +152,10 @@ uint16_t * draw_normal_letter(unsigned char letter, uint16_t xd, uint16_t yd,uin
     const int start_letter= arial_glyph_dsc[letter-32][1];
     const uint8_t* glyph = &arial_glyph_bitmap[start_letter];
     int width = arial_glyph_dsc[letter-32][0];
+    if(width%8)
+    	width += 8;
     width = (width/8);
-	width++;
+
     for (y_counter = 0; y_counter < LETTER_BITMAP_HEIGHT; y_counter++) //goes trough every vertical layer of the bitmap
     {
         xd = begin_x;

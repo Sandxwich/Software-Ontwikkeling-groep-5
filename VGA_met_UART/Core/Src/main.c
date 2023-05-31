@@ -151,7 +151,8 @@ int main(void)
   // See stm32f4xx_it.c
   HAL_UART_Receive_IT(&huart2, &input.byte_buffer_rx, LINE_BUFLEN);
   //API_read_bitmap_SD("01", 0, 0);
-  char test[] = "hello ";
+  char test[] = "Papa Jonas";
+  test[sizeof(test)+1]= '\0';
   char test_naam[] = "arial";
   char test_style[] = "vet";
   char* tekst = test;
@@ -161,7 +162,7 @@ int main(void)
   //test_style[0] = 'c';
   //API_draw_text(20, 90, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
   test_style[0] = 'n';
-  API_draw_text(50, 100, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
+  API_draw_text(10, 100, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
 
 
   int j = 0;
