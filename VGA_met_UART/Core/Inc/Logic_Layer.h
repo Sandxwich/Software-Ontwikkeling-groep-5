@@ -9,6 +9,9 @@
 
 #include "string.h"
 #include "Parser.h"
+#include "stdio.h"
+
+
 
 
 #define BUFFER_LEN 20
@@ -37,6 +40,7 @@ int LogicLayer_CommandSwitch(unsigned char, Message_parser);
 
 int LogicLayer_ColourCheck(Message_parser*, unsigned char);
 
+int LogicLayer_intToAscii(Message_parser*, int , int );
 
 #ifdef __cplusplus
 }

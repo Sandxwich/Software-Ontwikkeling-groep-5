@@ -1,12 +1,5 @@
 main.c:78:6:myprintf	1
-<<<<<<< HEAD
 main.c:95:5:main	4
-main.c:208:6:SystemClock_Config	3
-main.c:258:1:__io_putchar	1
-main.c:273:6:Error_Handler	1
-=======
-main.c:95:5:main	3
-main.c:200:6:SystemClock_Config	3
-main.c:250:1:__io_putchar	1
-main.c:265:6:Error_Handler	1
->>>>>>> 8b5e645722a593604503049be078ebb3e684358f
+main.c:210:6:SystemClock_Config	3
+main.c:260:1:__io_putchar	1
+main.c:281:6:Error_Handler	1

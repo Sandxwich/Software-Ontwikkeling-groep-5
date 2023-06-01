@@ -7,7 +7,7 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
+//#include "main.h"
 #include "fatfs.h"
 
 #include <math.h>
@@ -30,7 +30,7 @@
 #define PI			3.14159265359
 
 /* Prototypes ----------------------------------------------------------------*/
- uint16_t * draw_normal_letter(char*, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
+uint16_t * draw_normal_letter(char**, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
 
 uint16_t * draw_cursive_letter(char** , uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
 
@@ -47,10 +47,12 @@ int API_draw_bitmap(uint16_t, uint16_t, uint16_t);
 
 int API_read_bitmap_SD(char*, uint16_t, uint16_t);
 
-int intToAscii(Message_parser*, int , int );
+
 int API_draw_rectangle(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t, uint8_t);
 
 int API_draw_circle(uint16_t , uint16_t , uint16_t , uint8_t);
+
+int API_blur_screen();
 
 #ifdef __cplusplus
 }

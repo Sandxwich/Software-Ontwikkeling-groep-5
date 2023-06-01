@@ -131,10 +131,6 @@ int main(void)
   UB_VGA_SetPixel(0,0,0x00);
   UB_VGA_SetPixel(319,0,0x00);
 
-  API_draw_line(1, 1, 100, 100, 4, VGA_COL_GRAY);
-  //API_read_bitmap_SD(&input.line_rx_buffer, 0, 0);
-  //API_draw_bitmap(0,0,0);
-  API_draw_circle(100, 100, 40, VGA_COL_WHITE);
 
 
 
@@ -152,7 +148,7 @@ int main(void)
   // HAl wants a memory location to store the charachter it receives from the UART
   // We will pass it an array, but we will not use it. We declare our own variable in the interupt handler
   // See stm32f4xx_it.c
-  HAL_UART_Receive_IT(&huart2, &input.byte_buffer_rx, LINE_BUFLEN);
+  HAL_UART_Receive_IT(&huart2, input.byte_buffer_rx, LINE_BUFLEN);
   //API_read_bitmap_SD("01", 0, 0);
   char test[] = "tot ";
   char test_naam[] = "arial";

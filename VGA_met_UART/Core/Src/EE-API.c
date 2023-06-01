@@ -158,6 +158,7 @@ int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
             }
         }
     }
+
 }
 
 int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
@@ -490,19 +491,42 @@ int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 	return 0;
 }
 
-int intToAscii(Message_parser* localParser, int numbersize, int StructLocation)
+int API_blur_screen()
 {
-	char i = 0;
-	char DecimalshiftBuff = 0;
-	unsigned int decimalvalue = 0;
-	for (i = 0; i < numbersize; i++)
+	uint16_t xp, yp;
+	uint16_t xp_2, yp_2;
+	uint16_t sum = 0;
+	int i = 0;
+	for (yp = 0; yp < VGA_DISPLAY_Y; yp++)
 	{
-		DecimalshiftBuff = localParser->Parser_Message[StructLocation][i]-'0';
-		decimalvalue *= 10;
-		decimalvalue += DecimalshiftBuff;
+	  for (xp = 0; xp < VGA_DISPLAY_X; xp++)
+	  {
+	    sum = 0;
+	    i = 0;
+	    for (yp_2 = yp; yp_2 < yp + 3 && yp_2 < VGA_DISPLAY_Y; yp_2++)
+	    {
+	      for (xp_2 = xp; xp_2 < xp + 3 && xp_2 < VGA_DISPLAY_X; xp_2++)
+	      {
+	        sum += VGA_RAM1[(yp_2 * (VGA_DISPLAY_X + 1)) + xp_2];
+	        i++;
+	      }
+	    }
+	    sum /= 9;
+	    for (yp_2 = yp; yp_2 < yp + 3 && yp_2 < VGA_DISPLAY_Y; yp_2++)
+	    {
+	      for (xp_2 = xp; xp_2 < xp + 3 && xp_2 < VGA_DISPLAY_X; xp_2++)
+	      {
+	        VGA_RAM1[(yp_2 * (VGA_DISPLAY_X + 1)) + xp_2] = sum;
+	      }
+	    }
+	  }
 	}
-	return decimalvalue;
-}
+	return 0;
+	}
+
+
+
+
 
 
 

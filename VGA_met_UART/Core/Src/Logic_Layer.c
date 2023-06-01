@@ -1,4 +1,5 @@
 #include "Logic_Layer.h"
+#include "EE-API.h"
 
 
 
@@ -12,6 +13,7 @@ Message_parser LogicLayer_Parser(char *Message, unsigned int Messagelength)
 	i = 0;
 	j = 0;
 	k = 0;
+
 
 	Message_parser localParser;
 
@@ -95,11 +97,11 @@ int LogicLayer_CommandSwitch(unsigned char Command, Message_parser localParser)
 			unsigned short x_1, y_1, x_2, y_2;
 			unsigned char dikte, color;
 
-			x_1 = intToAscii(&localParser, strlen(localParser.Parser_Message[1]), 1);
-			y_1 = intToAscii(&localParser, strlen(localParser.Parser_Message[2]), 2);
-			x_2 = intToAscii(&localParser, strlen(localParser.Parser_Message[3]), 3);
-			y_2 = intToAscii(&localParser, strlen(localParser.Parser_Message[4]), 4);
-			dikte = intToAscii(&localParser, strlen(localParser.Parser_Message[6]), 6);
+			x_1 = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[1]), 1);
+			y_1 = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[2]), 2);
+			x_2 = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[3]), 3);
+			y_2 = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[4]), 4);
+			dikte = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[6]), 6);
 
 			color = LogicLayer_ColourCheck(&localParser, 5);
 
@@ -110,29 +112,40 @@ int LogicLayer_CommandSwitch(unsigned char Command, Message_parser localParser)
 
 		case 2:	//rechthoek
 		{
+			unsigned short x_lup,  y_lup,  breedte,  hoogte;
+			unsigned char color, gevuld;
+			x_lup = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[1]), 1);
+			y_lup = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[2]), 2);
+			breedte = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[3]), 3);
+			hoogte = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[4]), 4);
+
+			color = LogicLayer_ColourCheck(&localParser, 5);
+			gevuld = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[6]), 6);
+
+			API_draw_rectangle(x_lup, y_lup, breedte, hoogte, color, gevuld);
 
 			break;
 		}
 
 		case 3: //tekst
 		{
-
+			API_blur_screen();
 			break;
 		}
 
 		case 4: //bitmap
 		{
-			unsigned short x_lup = intToAscii(&localParser, strlen(localParser.Parser_Message[2]), 2);
-			unsigned short y_lup = intToAscii(&localParser, strlen(localParser.Parser_Message[3]), 3);
+			unsigned short x_lup = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[2]), 2);
+			unsigned short y_lup = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[3]), 3);
 			API_read_bitmap_SD(localParser.Parser_Message[1], x_lup, y_lup);
 			break;
 		}
 
 		case 5: //clearscherm
 		{
-
-
-
+			unsigned char color;
+			color = LogicLayer_ColourCheck(&localParser, 1);
+			UB_VGA_FillScreen(color);
 			break;
 		}
 		default:
@@ -162,5 +175,21 @@ int LogicLayer_ColourCheck(Message_parser* localParser, unsigned char StructLoca
 
 	return 0;
 
+}
+
+int LogicLayer_intToAscii(Message_parser* localParser, int numbersize, int StructLocation)
+{
+	unsigned char i = 0;
+	unsigned char DecimalshiftBuff = 0;
+	unsigned int decimalvalue = 0;
+	for (i = 0; i < numbersize; i++)
+	{
+		DecimalshiftBuff = localParser->Parser_Message[StructLocation][i];	// making sure array doesnt have a negative number
+		DecimalshiftBuff -= '0';
+
+		decimalvalue *= 10;
+		decimalvalue += DecimalshiftBuff;
+	}
+	return decimalvalue;
 }
 
