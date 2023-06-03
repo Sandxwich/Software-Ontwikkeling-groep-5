@@ -149,20 +149,20 @@ int main(void)
   // HAl wants a memory location to store the charachter it receives from the UART
   // We will pass it an array, but we will not use it. We declare our own variable in the interupt handler
   // See stm32f4xx_it.c
-  HAL_UART_Receive_IT(&huart2, &input.byte_buffer_rx, LINE_BUFLEN);
+  HAL_UART_Receive_IT(&huart2, input.byte_buffer_rx, LINE_BUFLEN);
   //API_read_bitmap_SD("01", 0, 0);
-  char test[] = "Papa Jonas";
+  char test[] = "Beep boop ik ben een robot";
   test[sizeof(test)+1]= '\0';
-  char test_naam[] = "arial";
+  char test_naam[] = "consolas";
   char test_style[] = "vet";
   char* tekst = test;
   char* fontnaam = test_naam;
   char* fontstijl = test_style;
-  //API_draw_text(20, 120, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
+  //API_draw_text(20, 50, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
   //test_style[0] = 'c';
   //API_draw_text(20, 90, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
   test_style[0] = 'n';
-  API_draw_text(10, 100, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
+  API_draw_text(10, 36, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
 
 
   int j = 0;
