@@ -56,65 +56,109 @@ int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_
 	return error;
 }
 
-int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
+int API_clear_screen(uint8_t color)
 {
-	int error = 0;
-	uint16_t xp,yp,xp2,yp2 = 0;
-	yp2=0;
-	  for(yp = 20; yp < 120; yp++)
-	  {
-	    for(xp = 0, xp2 = 0; xp < 100; xp++)
-	    {
-	      //UB_VGA_SetPixel(xp, yp, bitmap[yp2][xp2]);
-	      xp2++;
-	    }
-	    yp2++;
-	  }
-	  return error;
+	UB_VGA_FillScreen(color);
+
 }
 
-//	switch (nr)
-//	{
+
+
+int API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16_t hoogte, uint8_t color, uint8_t gevuld)
+{
+	int xp = 0;
+	int yp = 0;
+
+	//draw lines along screen every y-value
+	if(gevuld == 1)
+	{
+		for(yp = y_lup; yp < y_lup + hoogte; yp++)
+		{
+			for(xp = x_lup; xp < x_lup + breedte; xp++)
+			{
+				UB_VGA_SetPixel(xp, yp, color);
+			}
+		}
+	}
+
+	else if(gevuld == 0)
+	{
+
+			for(yp = y_lup; yp <= y_lup + hoogte; yp++)
+			{
+				for(xp = x_lup; xp <= x_lup + breedte; xp++)
+				{
+					//draw lines along screen every y-value
+					if ((yp == y_lup) || (yp == (y_lup + hoogte)))
+					{
+						UB_VGA_SetPixel(xp, yp, color);
+					}
+
+					//Draw pixels along screen only at edges
+					else if((xp == x_lup) || (xp == (x_lup + breedte)))
+					{
+						UB_VGA_SetPixel(xp, yp, color);
+					}
+				}
+			}
+	}
+}
+
+
+//int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
+//{
+//	int i;
+//	int j;
+//	int rads;
+//	int rad = 0;
+//	int x_c2 = x_c;
+//	int y_c2 = y_c;
 //
-//	case 0:	// Pijl up
+//
+//
+//	for (j = 0; j <= radius * 2; j++)
 //	{
-//		//doe iets met de bitmap
-//		break;
+//		for(i = 0; i <= radius * 2; i++)
+//		{
+//			rads = (pow(i, 2) + pow(j, 2));
+//			rad = sqrt(rads);
+//
+//			if(rad == radius)
+//			{
+//				UB_VGA_SetPixel((x_c2 - radius + i), (y_c2 - radius + j), color);
+//			}
+//			x_c++;
+//		}
+//		x_c = x_c2;
+//		y_c++;
 //	}
 //
-//	case 1:	// Pijl down
-//	{
-//
-//		break;
-//	}
-//
-//	case 2:	// Pijl Left
-//	{
-//
-//		break;
-//	}
-//
-//	case 3: // Pijl Right
-//	{
-//
-//		break;
-//	}
-//
-//	case 4: // Smiley
-//	{
-//
-//		break;
-//	}
-//
-//	case 5: // Frowney
-//	{
-//
-//		break;
-//	}
-//
-//	}
-//	return error;
 //}
+
+int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
+{
+    int i;
+    int j;
+    int rads;
+    int rad = 0;
+
+
+    for (j = -radius; j <= radius; j++)
+    {
+        for (i = -radius; i <= radius; i++)
+        {
+            rads = (pow(i, 2) + pow(j, 2));
+            rad = sqrt(rads);
+
+            if (rad == radius)
+            {
+                UB_VGA_SetPixel((x_c + i), (y_c + j), color);
+            }
+        }
+    }
+
+}
+
 
 int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* fontnaam,uint8_t fontgrootte,char* fontstijl)
 {
@@ -335,6 +379,20 @@ uint16_t * draw_fat_letter(unsigned char letter, unsigned char letter_type, uint
 
 
 
+
+
+/*****************************************************************************
+ *
+ * @brief This function lets the user select an bitmap from the SD card, This bitmap will be pushed to the VGA screen
+ *
+ * @param *nr This variable selects wich bitmap will be displayed
+ * @param x_lup This variable sets the starting x coordinate for the bitmap
+ * @param y_lup This variable sets the starting y coordinate for the bitmap
+ *
+ *
+ * @return Returns an error if error or returns nothing
+ *
+ *****************************************************************************/
 int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 {
 
@@ -375,15 +433,17 @@ int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 
 
     fres = f_mount(&FatFs, "", 1); //1=mount now
-    if (fres != FR_OK) {
-   	printf("f_mount error (%i)\r\n", fres);
-   	while(1);
+    if (fres != FR_OK)
+    {
+    	printf("f_mount error (%i)\r\n", fres);
+    	return 0; //error
     }
 
 	fres = f_open(&fil, File, FA_READ);
-	if (fres != FR_OK) {
-	printf("f_open error (%i)\r\n",fres);
-	while(1);
+	if (fres != FR_OK)
+	{
+		printf("f_open error (%i)\r\n",fres);
+		return 0; //error
 	}
 
 
@@ -447,8 +507,64 @@ int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 	return 0;
 }
 
-int intToAscii(int number)
+
+/*****************************************************************************
+ *
+ * @brief This function lets the user blur the screen using a filter kernel
+ *
+ * @return Returns an error if error or returns nothing
+ *
+ *****************************************************************************/
+int API_blur_screen()
 {
-   return '0' + number;
+	uint16_t xp, yp;
+	uint16_t xp_2, yp_2;
+	uint16_t sum = 0;
+	int i = 0;
+	for (yp = 0; yp < VGA_DISPLAY_Y; yp++)
+	{
+	  for (xp = 0; xp < VGA_DISPLAY_X; xp++)
+	  {
+	    sum = 0;
+	    i = 0;
+	    for (yp_2 = yp; yp_2 < yp + 3 && yp_2 < VGA_DISPLAY_Y; yp_2++)
+	    {
+	      for (xp_2 = xp; xp_2 < xp + 3 && xp_2 < VGA_DISPLAY_X; xp_2++)
+	      {
+	        sum += VGA_RAM1[(yp_2 * (VGA_DISPLAY_X + 1)) + xp_2];
+	        i++;
+	      }
+	    }
+	    sum /= 9;
+	    for (yp_2 = yp; yp_2 < yp + 3 && yp_2 < VGA_DISPLAY_Y; yp_2++)
+	    {
+	      for (xp_2 = xp; xp_2 < xp + 3 && xp_2 < VGA_DISPLAY_X; xp_2++)
+	      {
+	        VGA_RAM1[(yp_2 * (VGA_DISPLAY_X + 1)) + xp_2] = sum;
+	      }
+	    }
+	  }
+	}
+	return 0;
+	}
+
+/*****************************************************************************
+ *
+ * @brief
+ *
+ * @param
+ *
+ * @return
+ *
+ *****************************************************************************/
+unsigned int wacht(uint16_t msecs)
+{
+	HAL_Delay(msecs);
+	return 1;
 }
+
+
+
+
+
 

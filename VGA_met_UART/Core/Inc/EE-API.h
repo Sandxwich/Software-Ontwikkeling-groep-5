@@ -7,8 +7,9 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
 #include "fatfs.h"
+#include <math.h>
+
 #include "Arial.h"
 #include "Consolas.h"
 /* Defines -------------------------------------------------------------------*/
@@ -23,6 +24,10 @@
 #define LETTER_BITMAP_HEIGHT	48
 #define BITMAPSIZE				60
 #define NRBITMAPS				6
+
+#define BITMAPSIZE	60
+#define NRBITMAPS	6
+#define PI			3.14159265359
 
 /* Prototypes ----------------------------------------------------------------*/
  uint16_t * draw_normal_letter(unsigned char,unsigned char, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
@@ -39,6 +44,17 @@ int API_draw_line(uint16_t ,uint16_t, uint16_t, uint16_t, uint8_t, uint8_t);
 int API_draw_bitmap(uint16_t, uint16_t, uint16_t);
 
 int API_read_bitmap_SD(char*, uint16_t, uint16_t);
+
+
+int API_draw_rectangle(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t, uint8_t);
+
+int API_draw_circle(uint16_t , uint16_t , uint16_t , uint8_t);
+
+int API_blur_screen();
+
+unsigned int wacht(uint16_t);
+
+unsigned int repeat(uint8_t, uint8_t, uint8_t, uint8_t);
 
 #ifdef __cplusplus
 }
