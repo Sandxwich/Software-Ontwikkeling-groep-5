@@ -9,4 +9,4 @@ EE-API.c:284:12:draw_fat_letter	6
 EE-API.c:317:8:get_letter_bitmap	1
 EE-API.c:337:5:API_read_bitmap_SD	14
 EE-API.c:459:5:API_blur_screen	11
-EE-API.c:499:14:wacht	1
+EE-API.c:501:14:wacht	1

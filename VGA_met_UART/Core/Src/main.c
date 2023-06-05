@@ -55,7 +55,7 @@
 
 input_vars input;
 
-Message_parser Debugging[CIRCULAIR_BUFFER];
+Message_parser Debugging;
 
 
 
@@ -137,6 +137,7 @@ int main(void)
   unsigned int i = 0;
 
 
+
   for(i = 0; i < LINE_BUFLEN; i++)
 	  input.line_rx_buffer[i] = 0;
 
@@ -149,16 +150,8 @@ int main(void)
   // We will pass it an array, but we will not use it. We declare our own variable in the interupt handler
   // See stm32f4xx_it.c
   HAL_UART_Receive_IT(&huart2, input.byte_buffer_rx, LINE_BUFLEN);
-  //API_read_bitmap_SD("01", 0, 0);
-  char test[] = "tot ";
-  char test_naam[] = "arial";
-  char test_style[] = "normaal";
-  char* tekst = test;
-  char* fontnaam = test_naam;
-  char* fontstijl = test_style;
-  //API_draw_text(20, 120, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
 
-  int j = 0;
+
 
   int Test = 0;
 
@@ -171,20 +164,22 @@ int main(void)
 
 	  if(input.command_execute_flag == TRUE)
 	  {
-		  i = 0;
 	//	  API_read_bitmap_SD(&input.line_rx_buffer, j, 0);
-		  Debugging[0] = LogicLayer_Parser(input.line_rx_buffer, LINE_BUFLEN);
-		  Test = LogicLayer_CommandCheck(&Debugging[0]);
+		  Debugging = LogicLayer_Parser(input.line_rx_buffer, LINE_BUFLEN);
+		  Test = LogicLayer_CommandCheck(&Debugging);
 		  if (Test == 0)
 		  {
 			  //error handler
 		  }
 		  else
 		  {
-			  LogicLayer_CommandSwitch(&Debugging[0],Test);
+			  LogicLayer_CommandSwitch(&Debugging, Test);
+
 		  }
 
-		  j+= 160;
+
+
+
 
 
 

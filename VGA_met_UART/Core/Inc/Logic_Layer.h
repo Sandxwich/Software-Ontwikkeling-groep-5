@@ -27,7 +27,7 @@
  	char Parser_Message[BUFFER_LEN][BUFFER_LEN]; // 2d array voor het returnen van de message
  } Message_parser;
 
- extern Message_parser Debugging[CIRCULAIR_BUFFER];
+ extern Message_parser Debugging;
 
 
 

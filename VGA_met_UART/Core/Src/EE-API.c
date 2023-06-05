@@ -491,17 +491,18 @@ int API_blur_screen()
 
 /*****************************************************************************
  *
- * @brief This function lets the user blur the screen using a filter kernel
+ * @brief
  *
- * @return Returns an error if error or returns nothing
+ * @param
+ *
+ * @return
  *
  *****************************************************************************/
 unsigned int wacht(uint16_t msecs)
 {
 	HAL_Delay(msecs);
-	return 0;
+	return 1;
 }
-
 
 
 

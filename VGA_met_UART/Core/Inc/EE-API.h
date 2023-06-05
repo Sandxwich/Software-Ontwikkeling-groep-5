@@ -54,6 +54,8 @@ int API_blur_screen();
 
 unsigned int wacht(uint16_t);
 
+unsigned int repeat(uint8_t, uint8_t, uint8_t, uint8_t);
+
 #ifdef __cplusplus
 }
 #endif
