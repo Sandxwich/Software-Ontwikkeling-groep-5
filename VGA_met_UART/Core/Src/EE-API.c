@@ -161,65 +161,6 @@ int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
 
 }
 
-int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
-{
-	int error = 0;
-	uint16_t xp,yp,xp2,yp2 = 0;
-	yp2=0;
-	  for(yp = 20; yp < 120; yp++)
-	  {
-	    for(xp = 0, xp2 = 0; xp < 100; xp++)
-	    {
-	      //UB_VGA_SetPixel(xp, yp, bitmap[yp2][xp2]);
-	      xp2++;
-	    }
-	    yp2++;
-	  }
-	  return error;
-}
-
-//	switch (nr)
-//	{
-//
-//	case 0:	// Pijl up
-//	{
-//		//doe iets met de bitmap
-//		break;
-//	}
-//
-//	case 1:	// Pijl down
-//	{
-//
-//		break;
-//	}
-//
-//	case 2:	// Pijl Left
-//	{
-//
-//		break;
-//	}
-//
-//	case 3: // Pijl Right
-//	{
-//
-//		break;
-//	}
-//
-//	case 4: // Smiley
-//	{
-//
-//		break;
-//	}
-//
-//	case 5: // Frowney
-//	{
-//
-//		break;
-//	}
-//
-//	}
-//	return error;
-//}
 
 int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* fontnaam,uint8_t fontgrootte,char* fontstijl)
 {
@@ -379,6 +320,20 @@ char * get_letter_bitmap(char type,char letter,char* letterp)
 	return letterp;
 }
 
+
+
+/*****************************************************************************
+ *
+ * @brief This function lets the user select an bitmap from the SD card, This bitmap will be pushed to the VGA screen
+ *
+ * @param *nr This variable selects wich bitmap will be displayed
+ * @param x_lup This variable sets the starting x coordinate for the bitmap
+ * @param y_lup This variable sets the starting y coordinate for the bitmap
+ *
+ *
+ * @return Returns an error if error or returns nothing
+ *
+ *****************************************************************************/
 int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 {
 
@@ -419,15 +374,17 @@ int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 
 
     fres = f_mount(&FatFs, "", 1); //1=mount now
-    if (fres != FR_OK) {
-   	printf("f_mount error (%i)\r\n", fres);
-   	while(1);
+    if (fres != FR_OK)
+    {
+    	printf("f_mount error (%i)\r\n", fres);
+    	return 0; //error
     }
 
 	fres = f_open(&fil, File, FA_READ);
-	if (fres != FR_OK) {
-	printf("f_open error (%i)\r\n",fres);
-	while(1);
+	if (fres != FR_OK)
+	{
+		printf("f_open error (%i)\r\n",fres);
+		return 0; //error
 	}
 
 
@@ -491,6 +448,14 @@ int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 	return 0;
 }
 
+
+/*****************************************************************************
+ *
+ * @brief This function lets the user blur the screen using a filter kernel
+ *
+ * @return Returns an error if error or returns nothing
+ *
+ *****************************************************************************/
 int API_blur_screen()
 {
 	uint16_t xp, yp;
@@ -523,6 +488,19 @@ int API_blur_screen()
 	}
 	return 0;
 	}
+
+/*****************************************************************************
+ *
+ * @brief This function lets the user blur the screen using a filter kernel
+ *
+ * @return Returns an error if error or returns nothing
+ *
+ *****************************************************************************/
+unsigned int wacht(uint16_t msecs)
+{
+	HAL_Delay(msecs);
+	return 0;
+}
 
 
 

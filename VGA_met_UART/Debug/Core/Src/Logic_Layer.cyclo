@@ -1,5 +1,5 @@
 Logic_Layer.c:10:16:LogicLayer_Parser	8
 Logic_Layer.c:66:5:LogicLayer_CommandCheck	4
-Logic_Layer.c:90:5:LogicLayer_CommandSwitch	6
-Logic_Layer.c:159:5:LogicLayer_ColourCheck	3
-Logic_Layer.c:180:5:LogicLayer_intToAscii	2
+Logic_Layer.c:90:5:LogicLayer_CommandSwitch	9
+Logic_Layer.c:178:5:LogicLayer_ColourCheck	3
+Logic_Layer.c:199:14:LogicLayer_intToAscii	4

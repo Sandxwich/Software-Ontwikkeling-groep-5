@@ -5,7 +5,7 @@
 
 
 
-Message_parser LogicLayer_Parser(char*, unsigned int);
+
 
 Message_parser LogicLayer_Parser(char *Message, unsigned int Messagelength)
 {
@@ -63,16 +63,16 @@ Message_parser LogicLayer_Parser(char *Message, unsigned int Messagelength)
 	return localParser;
 }
 
-int LogicLayer_CommandCheck(Message_parser localParser)
+int LogicLayer_CommandCheck(Message_parser *localParser)
 {
 	int i;
 	unsigned char stringLength = sizeof(commands_check) / sizeof(commands_check[0]);
 	unsigned char stringCheck = 0;
 	unsigned char stringCorrect = 0;
 
-	for (i = 1; i < stringLength; i++)
+	for (i = 1; i <= stringLength; i++)
 	{
-		stringCheck = strcmp(localParser.Parser_Message[0],commands_check[i-1]);
+		stringCheck = strcmp(localParser->Parser_Message[0],commands_check[i-1]);
 		if (stringCheck == 0)
 		{
 			stringCorrect = i;
@@ -87,40 +87,48 @@ int LogicLayer_CommandCheck(Message_parser localParser)
 
 }
 
-int LogicLayer_CommandSwitch(unsigned char Command, Message_parser localParser)
+int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 {
+
 
 	switch (Command)
 	{
 		case 1:	//lijn
 		{
+			if (localParser->Variable_length-1 == 6)
+			{
 			unsigned short x_1, y_1, x_2, y_2;
 			unsigned char dikte, color;
 
-			x_1 = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[1]), 1);
-			y_1 = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[2]), 2);
-			x_2 = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[3]), 3);
-			y_2 = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[4]), 4);
-			dikte = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[6]), 6);
+			x_1 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+			y_1 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+			x_2 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
+			y_2 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[4]), 4);
+			color = LogicLayer_ColourCheck(localParser, 5);
+			dikte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
 
-			color = LogicLayer_ColourCheck(&localParser, 5);
+
 
 			API_draw_line(x_1, y_1, x_2, y_2, dikte, color);
 
 			break;
+			}
+			else return 0;
 		}
 
 		case 2:	//rechthoek
 		{
 			unsigned short x_lup,  y_lup,  breedte,  hoogte;
 			unsigned char color, gevuld;
-			x_lup = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[1]), 1);
-			y_lup = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[2]), 2);
-			breedte = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[3]), 3);
-			hoogte = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[4]), 4);
 
-			color = LogicLayer_ColourCheck(&localParser, 5);
-			gevuld = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[6]), 6);
+
+			x_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+			y_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+			breedte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
+			hoogte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[4]), 4);
+
+			color = LogicLayer_ColourCheck(localParser, 5);
+			gevuld = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
 
 			API_draw_rectangle(x_lup, y_lup, breedte, hoogte, color, gevuld);
 
@@ -129,23 +137,34 @@ int LogicLayer_CommandSwitch(unsigned char Command, Message_parser localParser)
 
 		case 3: //tekst
 		{
-			API_blur_screen();
+
 			break;
 		}
 
 		case 4: //bitmap
 		{
-			unsigned short x_lup = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[2]), 2);
-			unsigned short y_lup = LogicLayer_intToAscii(&localParser, strlen(localParser.Parser_Message[3]), 3);
-			API_read_bitmap_SD(localParser.Parser_Message[1], x_lup, y_lup);
+			unsigned short x_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+			unsigned short y_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
+			API_read_bitmap_SD(localParser->Parser_Message[1], x_lup, y_lup);
 			break;
 		}
 
 		case 5: //clearscherm
 		{
 			unsigned char color;
-			color = LogicLayer_ColourCheck(&localParser, 1);
+			color = LogicLayer_ColourCheck(localParser, 1);
 			UB_VGA_FillScreen(color);
+			break;
+		}
+		case 6:
+		{
+			unsigned int msecs = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+			wacht(msecs);
+			break;
+		}
+		case 9:
+		{
+			API_blur_screen();
 			break;
 		}
 		default:
@@ -177,18 +196,26 @@ int LogicLayer_ColourCheck(Message_parser* localParser, unsigned char StructLoca
 
 }
 
-int LogicLayer_intToAscii(Message_parser* localParser, int numbersize, int StructLocation)
+unsigned int LogicLayer_intToAscii(Message_parser* localParser, int numbersize, int StructLocation)
 {
 	unsigned char i = 0;
 	unsigned char DecimalshiftBuff = 0;
 	unsigned int decimalvalue = 0;
 	for (i = 0; i < numbersize; i++)
 	{
-		DecimalshiftBuff = localParser->Parser_Message[StructLocation][i];	// making sure array doesnt have a negative number
-		DecimalshiftBuff -= '0';
 
-		decimalvalue *= 10;
-		decimalvalue += DecimalshiftBuff;
+			DecimalshiftBuff = localParser->Parser_Message[StructLocation][i];	// making sure array doesnt have a negative number
+			if (DecimalshiftBuff < '0' ||  DecimalshiftBuff > '9')
+		{
+				printf("Error NaN");
+		}
+			else
+		{
+			DecimalshiftBuff -= '0';
+
+			decimalvalue *= 10;
+			decimalvalue += DecimalshiftBuff;
+		}
 	}
 	return decimalvalue;
 }

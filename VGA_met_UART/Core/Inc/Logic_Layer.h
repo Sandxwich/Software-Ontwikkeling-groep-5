@@ -10,11 +10,13 @@
 #include "string.h"
 #include "Parser.h"
 #include "stdio.h"
+//#include "EE-API.h"
 
 
 
 
 #define BUFFER_LEN 20
+#define CIRCULAIR_BUFFER 10
 
 
 
@@ -25,7 +27,7 @@
  	char Parser_Message[BUFFER_LEN][BUFFER_LEN]; // 2d array voor het returnen van de message
  } Message_parser;
 
- extern Message_parser Debugging;
+ extern Message_parser Debugging[CIRCULAIR_BUFFER];
 
 
 
@@ -34,13 +36,13 @@
 
 Message_parser LogicLayer_Parser(char*, unsigned int);
 
-int LogicLayer_CommandCheck(Message_parser);
+int LogicLayer_CommandCheck(Message_parser*);
 
-int LogicLayer_CommandSwitch(unsigned char, Message_parser);
+int LogicLayer_CommandSwitch(Message_parser* , unsigned char);
 
 int LogicLayer_ColourCheck(Message_parser*, unsigned char);
 
-int LogicLayer_intToAscii(Message_parser*, int , int );
+unsigned int LogicLayer_intToAscii(Message_parser*, int , int );
 
 #ifdef __cplusplus
 }

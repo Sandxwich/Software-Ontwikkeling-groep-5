@@ -55,7 +55,7 @@
 
 input_vars input;
 
-Message_parser Debugging;
+Message_parser Debugging[CIRCULAIR_BUFFER];
 
 
 
@@ -156,7 +156,7 @@ int main(void)
   char* tekst = test;
   char* fontnaam = test_naam;
   char* fontstijl = test_style;
-  API_draw_text(20, 120, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
+  //API_draw_text(20, 120, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
 
   int j = 0;
 
@@ -173,15 +173,15 @@ int main(void)
 	  {
 		  i = 0;
 	//	  API_read_bitmap_SD(&input.line_rx_buffer, j, 0);
-		  Debugging = LogicLayer_Parser(input.line_rx_buffer, LINE_BUFLEN);
-		  Test = LogicLayer_CommandCheck(Debugging);
+		  Debugging[0] = LogicLayer_Parser(input.line_rx_buffer, LINE_BUFLEN);
+		  Test = LogicLayer_CommandCheck(&Debugging[0]);
 		  if (Test == 0)
 		  {
 			  //error handler
 		  }
 		  else
 		  {
-			  LogicLayer_CommandSwitch(Test, Debugging);
+			  LogicLayer_CommandSwitch(&Debugging[0],Test);
 		  }
 
 		  j+= 160;

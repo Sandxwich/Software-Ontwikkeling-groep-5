@@ -27,7 +27,7 @@
 
 #define SIZE_OF_COMMANDS 20
 
-static char const commands_check[][SIZE_OF_COMMANDS] = {"lijn", "rechthoek", "tekst", "bitmap", "clearscherm", "wacht", "herhaal","cirkel" };
+static char const commands_check[][SIZE_OF_COMMANDS] = {"lijn", "rechthoek", "tekst", "bitmap", "clearscherm", "wacht", "herhaal","cirkel","blur" };
 
 
 static char const message_col_string[][SIZE_OF_COMMANDS] = {"zwart", "blauw", "lichtblauw", "groen", "lichtgroen", "cyaan", "lichtcyaan",

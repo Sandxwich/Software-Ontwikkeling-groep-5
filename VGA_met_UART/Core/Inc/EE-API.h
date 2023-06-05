@@ -7,9 +7,7 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-//#include "main.h"
 #include "fatfs.h"
-
 #include <math.h>
 
 /* Defines -------------------------------------------------------------------*/
@@ -53,6 +51,8 @@ int API_draw_rectangle(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t, uint8_t)
 int API_draw_circle(uint16_t , uint16_t , uint16_t , uint8_t);
 
 int API_blur_screen();
+
+unsigned int wacht(uint16_t);
 
 #ifdef __cplusplus
 }
