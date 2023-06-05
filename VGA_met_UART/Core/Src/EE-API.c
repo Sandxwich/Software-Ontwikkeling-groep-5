@@ -142,12 +142,14 @@ int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* font
 				break;
 			case 'v':
 				cord_p = draw_fat_letter(tekst[i], letter_style, xd, yd, fontgrootte, kleur, cord_p);
-				xd = cord_p;
+				xd = cord_p[0];
+				yd = cord_p[1];
 				break;
-//			case 'c':
-//				//cord_p = draw_cursive_letter(tekst[i], xd, yd, fontgrootte, kleur, cord_p);
-//				xd = cord_p;
-//				break;
+			case 'c':
+				cord_p = draw_cursive_letter(tekst[i], letter_style, xd, yd, fontgrootte, kleur, cord_p);
+				xd = cord_p[0];
+				yd = cord_p[1];
+				break;
 			}
 		}
 	return 0;//returns error
@@ -209,43 +211,69 @@ uint16_t * draw_normal_letter(unsigned char letter, unsigned char letter_type, u
     return cord_p;
 }
 
-//uint16_t * draw_cursive_letter(char* letterp, uint16_t xd, uint16_t yd,uint8_t fontgrootte, uint8_t kleur, uint16_t* cord_p)
-//{
-//	uint16_t end_cords;
-//	uint16_t begin_x = xd;
-//	int x_counter;
-//	int y_counter;
-//	int angle = LETTER_BITMAP_LENGTH; //sets angle offset for cursive letter
-//	if(fontgrootte == SIZE_1)
-//		angle = angle/2;
-//
-//	for(y_counter = 0; y_counter < LETTER_BITMAP_HEIGHT-1; y_counter++)
-//	{
-//		xd = begin_x;
-//		for(x_counter = 0; x_counter < LETTER_BITMAP_LENGTH-1; x_counter++)
-//		{
-//			if (letterp[x_counter+(LETTER_BITMAP_LENGTH*y_counter)] != 255)//checks if a pixel needs to be placed (background bitmap is white)
-//			{
-//				UB_VGA_SetPixel(xd+angle, yd, kleur);
-//			}
-//			xd++;
-//			if(fontgrootte == SIZE_1)
-//				x_counter++;
-//		}
-//		angle--; //decreases offset for each y layer to create an angle
-//		yd++;
-//		if(fontgrootte == SIZE_1)
-//			y_counter++;
-//	}
-//	end_cords = xd;
-//	cord_p = end_cords;
-//    return cord_p;
-//}
-//
-//
+uint16_t * draw_cursive_letter(unsigned char letter, unsigned char letter_type, uint16_t xd, uint16_t yd,uint8_t fontgrootte, uint8_t kleur, uint16_t* cord_p)
+{
+	uint16_t end_cords[2];
+	uint16_t begin_x = xd;
+	int x_counter;
+	int y_counter;
+	int width;
+	const uint8_t* glyph;
+	int start_letter;
+	int angle;
+
+	if(letter_type == ARIAL)
+	{
+		start_letter= arial_glyph_dsc[letter-32][1];
+		glyph = &arial_glyph_bitmap[start_letter];
+		width = arial_glyph_dsc[letter-32][0];
+	}
+	else if(letter_type == CONSOLAS)
+	{
+		start_letter= consolas_glyph_dsc[letter-32][1];
+		glyph = &consolas_glyph_bitmap[start_letter];
+		width = consolas_glyph_dsc[letter-32][0];
+	}
+	//next line test
+		if(xd+width*2 >= VGA_DISPLAY_X)
+		{
+			yd+=LETTER_BITMAP_HEIGHT;
+			begin_x=5;//sets x value to the left +5 pixels
+		}
+	//end test
+	if(width%8)
+		width += 8;
+	angle = width; //sets angle offset for cursive letter
+	if(fontgrootte == SIZE_1)
+		angle = angle/2;
+	width = (width/8);
+	for(y_counter = 0; y_counter < LETTER_BITMAP_HEIGHT; y_counter++)
+	{
+		xd = begin_x;
+		for(x_counter = 0; x_counter < width; x_counter++)
+		{
+			for (int i = 7; i >= 0; i--)
+			{
+				if ((glyph[((y_counter+1)*width)+x_counter] >> i) & 1)
+					UB_VGA_SetPixel(xd+angle, yd, kleur);
+				xd++;
+			}
+		}
+		angle--; //decreases offset for each y layer to create an angle
+		yd++;
+		if(fontgrootte == SIZE_1)
+			y_counter++;
+	}
+	end_cords[0] = xd;
+    end_cords[1] = yd-LETTER_BITMAP_HEIGHT;
+    cord_p = end_cords;
+    return cord_p;
+}
+
+
 uint16_t * draw_fat_letter(unsigned char letter, unsigned char letter_type, uint16_t xd, uint16_t yd,uint8_t fontgrootte, uint8_t kleur, uint16_t* cord_p)
 {
-	uint16_t end_cords;
+	uint16_t end_cords[2];
 	uint16_t begin_x = xd;
 	int x_counter;
 	int y_counter;
@@ -265,6 +293,13 @@ uint16_t * draw_fat_letter(unsigned char letter, unsigned char letter_type, uint
 		glyph = &consolas_glyph_bitmap[start_letter];
 		width = consolas_glyph_dsc[letter-32][0];
 	}
+	//next line test
+	if(xd+width+THICKNESS >= VGA_DISPLAY_X)
+	{
+		yd+=LETTER_BITMAP_HEIGHT;
+		begin_x=5;//sets x value to the left +5 pixels
+	}
+//end test
 	if(width%8)
 		width += 8;
 	width = (width/8);
@@ -292,8 +327,9 @@ uint16_t * draw_fat_letter(unsigned char letter, unsigned char letter_type, uint
 		if (fontgrootte == SIZE_1)//skips one pixel of bitmap to shorten the letter by half
 			y_counter++;
 	}
-	end_cords = xd;
-	cord_p = end_cords;
+	end_cords[0] = xd;
+    end_cords[1] = yd-LETTER_BITMAP_HEIGHT;
+    cord_p = end_cords;
 	return cord_p;
 }
 

@@ -154,15 +154,15 @@ int main(void)
   char test[] = "Beep boop ik ben een robot";
   test[sizeof(test)+1]= '\0';
   char test_naam[] = "consolas";
-  char test_style[] = "vet";
+  char test_style[] = "normaal";
   char* tekst = test;
   char* fontnaam = test_naam;
   char* fontstijl = test_style;
-  //API_draw_text(20, 50, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
-  //test_style[0] = 'c';
-  //API_draw_text(20, 90, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
-  test_style[0] = 'n';
-  API_draw_text(10, 36, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
+  API_draw_text(30, 10, VGA_COL_BLUE, tekst, fontnaam, 2, fontstijl);
+  test_style[0] = 'c';
+  API_draw_text(20, 90, VGA_COL_GREEN, tekst, fontnaam, 2, fontstijl);
+  test_style[0] = 'v';
+  API_draw_text(10, 50, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
 
 
   int j = 0;

@@ -17,6 +17,7 @@
 #define CONSOLAS				2
 #define SIZE_1					1
 #define SIZE_2					2
+#define THICKNESS				3
 #define MAX_STYLE_LENGHT		7
 #define SIZE_BITMAP				176
 #define LETTER_BITMAP_HEIGHT	48
@@ -26,7 +27,7 @@
 /* Prototypes ----------------------------------------------------------------*/
  uint16_t * draw_normal_letter(unsigned char,unsigned char, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
 
-//uint16_t * draw_cursive_letter(unsigned char, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
+uint16_t * draw_cursive_letter(unsigned char, unsigned char, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
 
 uint16_t * draw_fat_letter(unsigned char,unsigned char, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
 
