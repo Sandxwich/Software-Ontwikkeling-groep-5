@@ -20,14 +20,19 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dma.h"
+#include "fatfs.h"
+#include "spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include <stdio.h>
+#include <string.h>
+#include <stdarg.h> //for va_list var arg functions
+#include <EE-API.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,29 +52,40 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
 input_vars input;
 
 Message_parser Debugging;
 
 
+
+
 volatile char container[1024];
 volatile int temp;
 volatile int key;
+int err;
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-
-
-
 /* USER CODE BEGIN PFP */
-
+void myprintf(const char *fmt, ...);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void myprintf(const char *fmt, ...) {
+  static char buffer[256];
+  va_list args;
+  va_start(args, fmt);
+  vsnprintf(buffer, sizeof(buffer), fmt, args);
+  va_end(args);
 
+  int len = strlen(buffer);
+  HAL_UART_Transmit(&huart2, (uint8_t*)buffer, len, -1);
+
+}
 /* USER CODE END 0 */
 
 /**
@@ -85,7 +101,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+	HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -104,14 +120,21 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM2_Init();
   MX_USART2_UART_Init();
+  MX_FATFS_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 
   UB_VGA_Screen_Init(); // Init VGA-Screen
 
-  UB_VGA_FillScreen(VGA_COL_WHITE);
+  UB_VGA_FillScreen(VGA_COL_BLACK);
   UB_VGA_SetPixel(10,10,10);
   UB_VGA_SetPixel(0,0,0x00);
   UB_VGA_SetPixel(319,0,0x00);
+  //API_read_bitmap_SD(&input.line_rx_buffer, 0, 0);
+  //API_draw_bitmap(0,0,0);
+
+
+
   unsigned int i = 0;
 
 
@@ -126,10 +149,23 @@ int main(void)
   // HAl wants a memory location to store the charachter it receives from the UART
   // We will pass it an array, but we will not use it. We declare our own variable in the interupt handler
   // See stm32f4xx_it.c
-  HAL_UART_Receive_IT(&huart2, &input.byte_buffer_rx, LINE_BUFLEN);
+  HAL_UART_Receive_IT(&huart2, input.byte_buffer_rx, LINE_BUFLEN);
+  //API_read_bitmap_SD("01", 0, 0);
+  char test[] = "Beep boop ik ben een robot";
+  test[sizeof(test)+1]= '\0';
+  char test_naam[] = "consolas";
+  char test_style[] = "normaal";
+  char* tekst = test;
+  char* fontnaam = test_naam;
+  char* fontstijl = test_style;
+  API_draw_text(30, 10, VGA_COL_BLUE, tekst, fontnaam, 2, fontstijl);
+  test_style[0] = 'c';
+  API_draw_text(20, 90, VGA_COL_GREEN, tekst, fontnaam, 2, fontstijl);
+  test_style[0] = 'v';
+  API_draw_text(10, 50, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
 
-  // Test to see if the screen reacts to UART
-  unsigned char colorTest = TRUE;
+
+  int j = 0;
 
   /* USER CODE END 2 */
 
@@ -141,13 +177,16 @@ int main(void)
 	  if(input.command_execute_flag == TRUE)
 	  {
 		  i = 0;
+		  API_read_bitmap_SD(&input.line_rx_buffer, 0, 0);
 
-		  Debugging = LogicLayer_Parser(&input.line_rx_buffer, LINE_BUFLEN);
+
+		  j = 0;
+		  //Debugging = LogicLayer_Parser(&input.line_rx_buffer, LINE_BUFLEN);
 
 
 		  // Do some stuff
 		  printf("yes\n");
-		  UB_VGA_FillScreen(colorTest);
+		  //UB_VGA_FillScreen(colorTest);
 
 
 		  // When finished reset the flag
@@ -173,6 +212,7 @@ void SystemClock_Config(void)
   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
@@ -183,11 +223,12 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLM = 4;
   RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 4;
+  RCC_OscInitStruct.PLL.PLLQ = 7;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
+
   /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
@@ -251,5 +292,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

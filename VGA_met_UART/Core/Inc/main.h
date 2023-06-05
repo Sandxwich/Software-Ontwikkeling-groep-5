@@ -38,6 +38,7 @@ extern "C" {
 #include "string.h"
 #include <stdlib.h>
 
+
 #include "stm32_ub_vga_screen.h"
 
 #include "Logic_Layer.h"
@@ -66,6 +67,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+
+#define SD_SPI_HANDLE hspi1
+#define SD_CS_Pin GPIO_PIN_1
+#define SD_CS_GPIO_Port GPIOA
 #define VGA_BLUE0_Pin GPIO_PIN_8
 #define VGA_BLUE0_GPIO_Port GPIOE
 #define VGA_BLUE1_Pin GPIO_PIN_9
@@ -86,10 +91,11 @@ void Error_Handler(void);
 #define VGA_HSYNC_GPIO_Port GPIOB
 #define VGA_VSYNC_Pin GPIO_PIN_12
 #define VGA_VSYNC_GPIO_Port GPIOB
+
 /* USER CODE BEGIN Private defines */
 
 #define BYTE_BUFLEN 	 1
-#define LINE_BUFLEN 	 1024
+#define LINE_BUFLEN 	 1000
 #define CARRIAGE_RETURN  13 /* carriage return char \r */
 #define LINE_FEED 		 10 /* linefeed char \n		   */
 
@@ -125,5 +131,3 @@ extern volatile int key;
 #endif
 
 #endif /* __MAIN_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
