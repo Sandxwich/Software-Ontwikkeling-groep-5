@@ -151,8 +151,6 @@ int main(void)
   // See stm32f4xx_it.c
   HAL_UART_Receive_IT(&huart2, input.byte_buffer_rx, LINE_BUFLEN);
 
-
-
   int Test = 0;
 
   /* USER CODE END 2 */
