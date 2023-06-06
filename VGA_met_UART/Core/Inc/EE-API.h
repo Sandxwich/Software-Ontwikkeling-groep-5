@@ -7,10 +7,14 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
 #include "fatfs.h"
+#include "main.h"
 #include "Arial.h"
+#include "Arial_24.h"
 #include "Consolas.h"
+#include "consolas_24.h"
+#include "API_error.h"
+
 /* Defines -------------------------------------------------------------------*/
 /*     |NAME                |  |Value|                                       */
 #define ARIAL					1
@@ -20,19 +24,24 @@
 #define THICKNESS				3
 #define MAX_STYLE_LENGHT		7
 #define SIZE_BITMAP				176
-#define LETTER_BITMAP_HEIGHT	48
+#define LETTER_SIZE_2_HEIGHT	48
+#define LETTER_SIZE_1_HEIGHT	24
 #define BITMAPSIZE				60
 #define NRBITMAPS				6
 
 /* Prototypes ----------------------------------------------------------------*/
- uint16_t * draw_normal_letter(unsigned char,unsigned char, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
+
+//draw letter fucntions
+int API_draw_text(uint16_t, uint16_t, uint8_t, char*, char*, uint8_t, char*);
+
+uint16_t * draw_normal_letter(unsigned char,unsigned char, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
 
 uint16_t * draw_cursive_letter(unsigned char, unsigned char, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
 
 uint16_t * draw_fat_letter(unsigned char,unsigned char, uint16_t, uint16_t, uint8_t, uint8_t, uint16_t*);
 
-int API_draw_text(uint16_t, uint16_t, uint8_t, char*, char*, uint8_t, char*);
-
+//one off functions
+void API_err_handler();
 
 int API_draw_line(uint16_t ,uint16_t, uint16_t, uint16_t, uint8_t, uint8_t);
 

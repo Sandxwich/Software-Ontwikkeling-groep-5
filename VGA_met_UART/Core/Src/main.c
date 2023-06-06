@@ -151,18 +151,14 @@ int main(void)
   // See stm32f4xx_it.c
   HAL_UART_Receive_IT(&huart2, input.byte_buffer_rx, LINE_BUFLEN);
   //API_read_bitmap_SD("01", 0, 0);
-  char test[] = "Beep boop ik ben een robot";
+  char test[] = "the quick brown fox jumps over the lazy dog";
   test[sizeof(test)+1]= '\0';
   char test_naam[] = "consolas";
-  char test_style[] = "normaal";
+  char test_style[] = "cursief";
   char* tekst = test;
   char* fontnaam = test_naam;
   char* fontstijl = test_style;
-  API_draw_text(30, 10, VGA_COL_BLUE, tekst, fontnaam, 2, fontstijl);
-  test_style[0] = 'c';
-  API_draw_text(20, 90, VGA_COL_GREEN, tekst, fontnaam, 2, fontstijl);
-  test_style[0] = 'v';
-  API_draw_text(10, 50, VGA_COL_RED, tekst, fontnaam, 2, fontstijl);
+  API_draw_text(10, 200, VGA_COL_CYAN, tekst, fontnaam, 1, fontstijl);
 
 
   int j = 0;
