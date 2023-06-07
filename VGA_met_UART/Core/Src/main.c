@@ -127,17 +127,7 @@ int main(void)
   UB_VGA_Screen_Init(); // Init VGA-Screen
 
   UB_VGA_FillScreen(VGA_COL_BLACK);
-  UB_VGA_SetPixel(10,10,10);
-  UB_VGA_SetPixel(0,0,0x00);
-  UB_VGA_SetPixel(319,0,0x00);
-
-
-
-
   unsigned int i = 0;
-
-
-
   for(i = 0; i < LINE_BUFLEN; i++)
 	  input.line_rx_buffer[i] = 0;
 
@@ -177,10 +167,6 @@ int main(void)
 		  for (i = 0; i < ARGUMENTEN_LEN; i++)
 			  for (int j = 0; j < BUFFER_LEN_PARSER; j++)
 				  Debugging.Parser_Message[i][j] = 0;
-		  // Do some stuff
-		  printf("yes\n");
-		  //UB_VGA_FillScreen(colorTest);
-
 		  // When finished reset the flag
 		  input.command_execute_flag = FALSE;
 	  }
