@@ -537,7 +537,7 @@ int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 						VGA_RAM1[(yp * (VGA_DISPLAY_X + 1)) + xp] = ColourFile;
 					}
 
-					UB_VGA_SetPixel(xp, yp, ColourFile);
+					//UB_VGA_SetPixel(xp, yp, ColourFile);
 					xp++;
 					xp2++;
 					if (xp2 >= Width)

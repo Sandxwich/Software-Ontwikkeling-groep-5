@@ -97,81 +97,129 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 		{
 			if (localParser->Variable_length-1 == 6)
 			{
-			unsigned short x_1, y_1, x_2, y_2;
-			unsigned char dikte, color;
+				unsigned short x_1, y_1, x_2, y_2;
+				unsigned char dikte, color;
 
-			x_1 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
-			y_1 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
-			x_2 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
-			y_2 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[4]), 4);
-			color = LogicLayer_ColourCheck(localParser, 5);
-			dikte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
+				x_1 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+				y_1 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+				x_2 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
+				y_2 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[4]), 4);
+				color = LogicLayer_ColourCheck(localParser, 5);
+				dikte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
 
+				API_draw_line(x_1, y_1, x_2, y_2, dikte, color);
 
-
-			API_draw_line(x_1, y_1, x_2, y_2, dikte, color);
-
-			break;
+				break;
 			}
 			else return 0;
 		}
 
 		case 2:	//rechthoek
 		{
-			unsigned short x_lup,  y_lup,  breedte,  hoogte;
-			unsigned char color, gevuld;
+			if (localParser->Variable_length-1 == 6)
+			{
+				unsigned short x_lup,  y_lup,  breedte,  hoogte;
+				unsigned char color, gevuld;
 
 
-			x_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
-			y_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
-			breedte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
-			hoogte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[4]), 4);
+				x_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+				y_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+				breedte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
+				hoogte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[4]), 4);
 
-			color = LogicLayer_ColourCheck(localParser, 5);
-			gevuld = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
+				color = LogicLayer_ColourCheck(localParser, 5);
+				gevuld = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
 
-			API_draw_rectangle(x_lup, y_lup, breedte, hoogte, color, gevuld);
+				API_draw_rectangle(x_lup, y_lup, breedte, hoogte, color, gevuld);
 
-			break;
+				break;
+			}
+			else return 0;
 		}
 
 		case 3: //tekst
 		{
-			uint16_t x = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
-			uint16_t y = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
-			uint8_t kleur = LogicLayer_ColourCheck(localParser, 3);
-			uint8_t fontgrootte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
+			if (localParser->Variable_length-1 == 7)
+			{
+				uint16_t x = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+				uint16_t y = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+				uint8_t kleur = LogicLayer_ColourCheck(localParser, 3);
+				uint8_t fontgrootte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
 
-			API_draw_text(x, y, kleur, localParser->Parser_Message[4],localParser->Parser_Message[5], fontgrootte, localParser->Parser_Message[7]);
-			break;
+				API_draw_text(x, y, kleur, localParser->Parser_Message[4],localParser->Parser_Message[5], fontgrootte, localParser->Parser_Message[7]);
+				break;
+			}
+			else return 0;
 		}
 
 		case 4: //bitmap
 		{
-			unsigned short x_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
-			unsigned short y_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
-			API_read_bitmap_SD(localParser->Parser_Message[1], x_lup, y_lup);
-			break;
+
+			if (localParser->Variable_length-1 == 3)
+			{
+				unsigned short x_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+				unsigned short y_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
+
+				API_read_bitmap_SD(localParser->Parser_Message[1], x_lup, y_lup);
+
+				break;
+			}
+			else return 0;
 		}
 
 		case 5: //clearscherm
 		{
-			unsigned char color;
-			color = LogicLayer_ColourCheck(localParser, 1);
-			UB_VGA_FillScreen(color);
-			break;
+			if (localParser->Variable_length-1 == 1)
+			{
+				unsigned char color;
+				color = LogicLayer_ColourCheck(localParser, 1);
+
+				UB_VGA_FillScreen(color);
+
+				break;
+			}
 		}
+
 		case 6:
 		{
-			unsigned int msecs = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
-			wacht(msecs);
-			break;
+			if (localParser->Variable_length-1 == 1)
+			{
+				unsigned int msecs = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+
+				wacht(msecs);
+
+				break;
+			}
+			else return 0;
 		}
+
+		case 8:
+		{
+			if (localParser->Variable_length-1 == 4)
+			{
+				uint16_t x_c = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+				uint16_t y_c = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+				uint16_t radius = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
+				uint8_t color = LogicLayer_ColourCheck(localParser, 4);
+
+				API_draw_circle(x_c, y_c, radius, color);
+
+				break;
+			}
+			else return 0;
+		}
+
 		case 9:
 		{
-			API_blur_screen();
-			break;
+			if (localParser->Variable_length-1 == 1)
+			{
+				API_blur_screen();
+
+				break;
+			}
+			else return 0;
 		}
+
 		default:
 		{
 			return 0;
