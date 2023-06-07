@@ -7,6 +7,6 @@ EE-API.c:207:12:draw_normal_letter	14
 EE-API.c:283:12:draw_cursive_letter	15
 EE-API.c:363:12:draw_fat_letter	15
 EE-API.c:464:5:API_read_bitmap_SD	14
-EE-API.c:586:5:API_blur_screen	11
-EE-API.c:628:14:wacht	1
-EE-API.c:634:6:API_err_handler	5
+EE-API.c:584:5:API_blur_screen	11
+EE-API.c:626:14:wacht	1
+EE-API.c:632:6:API_err_handler	5

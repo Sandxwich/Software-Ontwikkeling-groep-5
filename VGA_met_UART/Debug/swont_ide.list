@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  00030088  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00018095  00000000  00000000  000300b8  2**0
+ 12 .debug_info   000180a2  00000000  00000000  000300b8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00003964  00000000  00000000  0004814d  2**0
+ 13 .debug_abbrev 000039a4  00000000  00000000  0004815a  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 000013d8  00000000  00000000  0004bab8  2**3
+ 14 .debug_aranges 000013d8  00000000  00000000  0004bb00  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 00001230  00000000  00000000  0004ce90  2**3
+ 15 .debug_ranges 00001230  00000000  00000000  0004ced8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00026a2e  00000000  00000000  0004e0c0  2**0
+ 16 .debug_macro  00026a2e  00000000  00000000  0004e108  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0001dd70  00000000  00000000  00074aee  2**0
+ 17 .debug_line   0001dd70  00000000  00000000  00074b36  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000d0deb  00000000  00000000  0009285e  2**0
+ 18 .debug_str    000d0df5  00000000  00000000  000928a6  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  00163649  2**0
+ 19 .comment      00000050  00000000  00000000  0016369b  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00005e9c  00000000  00000000  0016369c  2**2
+ 20 .debug_frame  00005e9c  00000000  00000000  001636ec  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -3135,8 +3135,6 @@ int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
  8001be0:	4a3a      	ldr	r2, [pc, #232]	; (8001ccc <API_read_bitmap_SD+0x2a8>)
  8001be2:	54d1      	strb	r1, [r2, r3]
 					}
-
-					//UB_VGA_SetPixel(xp, yp, ColourFile);
 					xp++;
  8001be4:	f8b7 34b2 	ldrh.w	r3, [r7, #1202]	; 0x4b2
  8001be8:	3301      	adds	r3, #1
@@ -3513,11 +3511,11 @@ void API_err_handler()
  8001e78:	0800c28c 	.word	0x0800c28c
 
 08001e7c <LogicLayer_Parser>:
-
-
-
-
-Message_parser LogicLayer_Parser(char *Message, unsigned int Messagelength)
+ *
+ * @return deze functie returned de struct Message_parser hierin staan de verschillende variabelen opgedeeld in hokjes en het hoeveelheid ontvangen variabelen
+ *
+ *****************************************************************************/
+Message_parser LogicLayer_Parser(char *PMessage, unsigned int Messagelength)
 {
  8001e7c:	b580      	push	{r7, lr}
  8001e7e:	f5ad 6d82 	sub.w	sp, sp, #1040	; 0x410
@@ -3545,13 +3543,13 @@ Message_parser LogicLayer_Parser(char *Message, unsigned int Messagelength)
  8001eb6:	f8c7 3404 	str.w	r3, [r7, #1028]	; 0x404
 
 
-	Message_parser localParser;
+	Message_parser PlocalParser;
 
-	  while (Message[i] != 0) 	// Kijk voor line end
+	  while (PMessage[i] != 0) 	// Kijk voor line end
  8001eba:	e08b      	b.n	8001fd4 <LogicLayer_Parser+0x158>
 	  {
 
-		  while (Message[i] != 44 && Message[i] != 0)		//Detectie van de comma seperator
+		  while (PMessage[i] != 44 && PMessage[i] != 0)		//Detectie van de comma seperator
 		  {
 			  i++;
  8001ebc:	f8d7 340c 	ldr.w	r3, [r7, #1036]	; 0x40c
@@ -3571,7 +3569,7 @@ Message_parser LogicLayer_Parser(char *Message, unsigned int Messagelength)
  8001eda:	f008 fa8d 	bl	800a3f8 <puts>
 				  break;
  8001ede:	e015      	b.n	8001f0c <LogicLayer_Parser+0x90>
-		  while (Message[i] != 44 && Message[i] != 0)		//Detectie van de comma seperator
+		  while (PMessage[i] != 44 && PMessage[i] != 0)		//Detectie van de comma seperator
  8001ee0:	f507 6382 	add.w	r3, r7, #1040	; 0x410
  8001ee4:	f5a3 6381 	sub.w	r3, r3, #1032	; 0x408
  8001ee8:	681a      	ldr	r2, [r3, #0]
@@ -3596,7 +3594,7 @@ Message_parser LogicLayer_Parser(char *Message, unsigned int Messagelength)
  8001f0e:	f8c7 3400 	str.w	r3, [r7, #1024]	; 0x400
  8001f12:	e022      	b.n	8001f5a <LogicLayer_Parser+0xde>
 	  	  {
-	  		localParser.Parser_Message[k][l] = Message[j];
+	  		PlocalParser.Parser_Message[k][l] = PMessage[j];
  8001f14:	f507 6382 	add.w	r3, r7, #1040	; 0x410
  8001f18:	f5a3 6381 	sub.w	r3, r3, #1032	; 0x408
  8001f1c:	681a      	ldr	r2, [r3, #0]
@@ -3633,7 +3631,7 @@ Message_parser LogicLayer_Parser(char *Message, unsigned int Messagelength)
  8001f6a:	3301      	adds	r3, #1
  8001f6c:	f8c7 3408 	str.w	r3, [r7, #1032]	; 0x408
 
-	  	  if (Message[j] == 0x20)	// checking for spaces between lines
+	  	  if (PMessage[j] == 0x20)	// checking for spaces between lines
  8001f70:	f507 6382 	add.w	r3, r7, #1040	; 0x410
  8001f74:	f5a3 6381 	sub.w	r3, r3, #1032	; 0x408
  8001f78:	681a      	ldr	r2, [r3, #0]
@@ -3649,7 +3647,7 @@ Message_parser LogicLayer_Parser(char *Message, unsigned int Messagelength)
  8001f8c:	f8c7 3408 	str.w	r3, [r7, #1032]	; 0x408
 	  	  }
 
-	  	  localParser.Parser_Message[k][l] = '\0';
+	  	  PlocalParser.Parser_Message[k][l] = '\0';
  8001f90:	f507 6382 	add.w	r3, r7, #1040	; 0x410
  8001f94:	f5a3 727f 	sub.w	r2, r3, #1020	; 0x3fc
  8001f98:	f8d7 3404 	ldr.w	r3, [r7, #1028]	; 0x404
@@ -3682,7 +3680,7 @@ Message_parser LogicLayer_Parser(char *Message, unsigned int Messagelength)
  8001fce:	f008 fa13 	bl	800a3f8 <puts>
 	  		  	  break;
  8001fd2:	e00b      	b.n	8001fec <LogicLayer_Parser+0x170>
-	  while (Message[i] != 0) 	// Kijk voor line end
+	  while (PMessage[i] != 0) 	// Kijk voor line end
  8001fd4:	f507 6382 	add.w	r3, r7, #1040	; 0x410
  8001fd8:	f5a3 6381 	sub.w	r3, r3, #1032	; 0x408
  8001fdc:	681a      	ldr	r2, [r3, #0]
@@ -3695,14 +3693,14 @@ Message_parser LogicLayer_Parser(char *Message, unsigned int Messagelength)
 
 	  }
 
-	localParser.Variable_length = k;
+	PlocalParser.Variable_length = k;
  8001fec:	f8d7 3404 	ldr.w	r3, [r7, #1028]	; 0x404
  8001ff0:	b2da      	uxtb	r2, r3
  8001ff2:	f507 6382 	add.w	r3, r7, #1040	; 0x410
  8001ff6:	f5a3 737f 	sub.w	r3, r3, #1020	; 0x3fc
  8001ffa:	701a      	strb	r2, [r3, #0]
 
-	return localParser;
+	return PlocalParser;
  8001ffc:	f507 6382 	add.w	r3, r7, #1040	; 0x410
  8002000:	f2a3 4304 	subw	r3, r3, #1028	; 0x404
  8002004:	681a      	ldr	r2, [r3, #0]
@@ -3725,8 +3723,11 @@ Message_parser LogicLayer_Parser(char *Message, unsigned int Messagelength)
  8002034:	0800c2f8 	.word	0x0800c2f8
 
 08002038 <LogicLayer_CommandCheck>:
-
-int LogicLayer_CommandCheck(Message_parser *localParser)
+ *
+ * @return returned niks tenzij de commando niet gevonden is
+ *
+ *****************************************************************************/
+int LogicLayer_CommandCheck(Message_parser* PlocalParser)
 {
  8002038:	b580      	push	{r7, lr}
  800203a:	b084      	sub	sp, #16
@@ -3748,7 +3749,7 @@ int LogicLayer_CommandCheck(Message_parser *localParser)
  800204e:	60fb      	str	r3, [r7, #12]
  8002050:	e016      	b.n	8002080 <LogicLayer_CommandCheck+0x48>
 	{
-		stringCheck = strcmp(localParser->Parser_Message[0],commands_check[i-1]);
+		stringCheck = strcmp(PlocalParser->Parser_Message[0],commands_check[i-1]);
  8002052:	687b      	ldr	r3, [r7, #4]
  8002054:	1c58      	adds	r0, r3, #1
  8002056:	68fb      	ldr	r3, [r7, #12]
@@ -3802,8 +3803,11 @@ int LogicLayer_CommandCheck(Message_parser *localParser)
  800209c:	08015670 	.word	0x08015670
 
 080020a0 <LogicLayer_CommandSwitch>:
-
-int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
+ *
+ * @return returned niks tenzij er niet genoeg variabelen mee zijn gegeven
+ *
+ *****************************************************************************/
+int LogicLayer_CommandSwitch(Message_parser* PlocalParser, unsigned char Command)
 {
  80020a0:	b5b0      	push	{r4, r5, r7, lr}
  80020a2:	b092      	sub	sp, #72	; 0x48
@@ -3811,8 +3815,6 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  80020a6:	6078      	str	r0, [r7, #4]
  80020a8:	460b      	mov	r3, r1
  80020aa:	70fb      	strb	r3, [r7, #3]
-
-
 	switch (Command)
  80020ac:	78fb      	ldrb	r3, [r7, #3]
  80020ae:	3b01      	subs	r3, #1
@@ -3832,7 +3834,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 	{
 		case 1:	//lijn
 		{
-			if (localParser->Variable_length-1 == 6)
+			if (PlocalParser->Variable_length-1 == 6)
  80020e0:	687b      	ldr	r3, [r7, #4]
  80020e2:	781b      	ldrb	r3, [r3, #0]
  80020e4:	2b07      	cmp	r3, #7
@@ -3841,7 +3843,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 				unsigned short x_1, y_1, x_2, y_2;
 				unsigned char dikte, color;
 
-				x_1 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+				x_1 = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[1]), 1);
  80020e8:	687b      	ldr	r3, [r7, #4]
  80020ea:	3333      	adds	r3, #51	; 0x33
  80020ec:	4618      	mov	r0, r3
@@ -3853,7 +3855,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  80020fa:	f000 f9cd 	bl	8002498 <LogicLayer_intToAscii>
  80020fe:	4603      	mov	r3, r0
  8002100:	82fb      	strh	r3, [r7, #22]
-				y_1 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+				y_1 = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[2]), 2);
  8002102:	687b      	ldr	r3, [r7, #4]
  8002104:	3365      	adds	r3, #101	; 0x65
  8002106:	4618      	mov	r0, r3
@@ -3865,7 +3867,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  8002114:	f000 f9c0 	bl	8002498 <LogicLayer_intToAscii>
  8002118:	4603      	mov	r3, r0
  800211a:	82bb      	strh	r3, [r7, #20]
-				x_2 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
+				x_2 = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[3]), 3);
  800211c:	687b      	ldr	r3, [r7, #4]
  800211e:	3397      	adds	r3, #151	; 0x97
  8002120:	4618      	mov	r0, r3
@@ -3877,7 +3879,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  800212e:	f000 f9b3 	bl	8002498 <LogicLayer_intToAscii>
  8002132:	4603      	mov	r3, r0
  8002134:	827b      	strh	r3, [r7, #18]
-				y_2 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[4]), 4);
+				y_2 = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[4]), 4);
  8002136:	687b      	ldr	r3, [r7, #4]
  8002138:	33c9      	adds	r3, #201	; 0xc9
  800213a:	4618      	mov	r0, r3
@@ -3889,13 +3891,13 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  8002148:	f000 f9a6 	bl	8002498 <LogicLayer_intToAscii>
  800214c:	4603      	mov	r3, r0
  800214e:	823b      	strh	r3, [r7, #16]
-				color = LogicLayer_ColourCheck(localParser, 5);
+				color = LogicLayer_ColourCheck(PlocalParser, 5);
  8002150:	2105      	movs	r1, #5
  8002152:	6878      	ldr	r0, [r7, #4]
  8002154:	f000 f962 	bl	800241c <LogicLayer_ColourCheck>
  8002158:	4603      	mov	r3, r0
  800215a:	73fb      	strb	r3, [r7, #15]
-				dikte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
+				dikte = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[6]), 6);
  800215c:	687b      	ldr	r3, [r7, #4]
  800215e:	f203 132d 	addw	r3, r3, #301	; 0x12d
  8002162:	4618      	mov	r0, r3
@@ -3930,7 +3932,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 
 		case 2:	//rechthoek
 		{
-			if (localParser->Variable_length-1 == 6)
+			if (PlocalParser->Variable_length-1 == 6)
  8002194:	687b      	ldr	r3, [r7, #4]
  8002196:	781b      	ldrb	r3, [r3, #0]
  8002198:	2b07      	cmp	r3, #7
@@ -3940,7 +3942,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 				unsigned char color, gevuld;
 
 
-				x_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+				x_lup = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[1]), 1);
  800219c:	687b      	ldr	r3, [r7, #4]
  800219e:	3333      	adds	r3, #51	; 0x33
  80021a0:	4618      	mov	r0, r3
@@ -3952,7 +3954,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  80021ae:	f000 f973 	bl	8002498 <LogicLayer_intToAscii>
  80021b2:	4603      	mov	r3, r0
  80021b4:	843b      	strh	r3, [r7, #32]
-				y_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+				y_lup = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[2]), 2);
  80021b6:	687b      	ldr	r3, [r7, #4]
  80021b8:	3365      	adds	r3, #101	; 0x65
  80021ba:	4618      	mov	r0, r3
@@ -3964,7 +3966,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  80021c8:	f000 f966 	bl	8002498 <LogicLayer_intToAscii>
  80021cc:	4603      	mov	r3, r0
  80021ce:	83fb      	strh	r3, [r7, #30]
-				breedte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
+				breedte = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[3]), 3);
  80021d0:	687b      	ldr	r3, [r7, #4]
  80021d2:	3397      	adds	r3, #151	; 0x97
  80021d4:	4618      	mov	r0, r3
@@ -3976,7 +3978,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  80021e2:	f000 f959 	bl	8002498 <LogicLayer_intToAscii>
  80021e6:	4603      	mov	r3, r0
  80021e8:	83bb      	strh	r3, [r7, #28]
-				hoogte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[4]), 4);
+				hoogte = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[4]), 4);
  80021ea:	687b      	ldr	r3, [r7, #4]
  80021ec:	33c9      	adds	r3, #201	; 0xc9
  80021ee:	4618      	mov	r0, r3
@@ -3989,13 +3991,13 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  8002200:	4603      	mov	r3, r0
  8002202:	837b      	strh	r3, [r7, #26]
 
-				color = LogicLayer_ColourCheck(localParser, 5);
+				color = LogicLayer_ColourCheck(PlocalParser, 5);
  8002204:	2105      	movs	r1, #5
  8002206:	6878      	ldr	r0, [r7, #4]
  8002208:	f000 f908 	bl	800241c <LogicLayer_ColourCheck>
  800220c:	4603      	mov	r3, r0
  800220e:	767b      	strb	r3, [r7, #25]
-				gevuld = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
+				gevuld = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[6]), 6);
  8002210:	687b      	ldr	r3, [r7, #4]
  8002212:	f203 132d 	addw	r3, r3, #301	; 0x12d
  8002216:	4618      	mov	r0, r3
@@ -4030,13 +4032,13 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 
 		case 3: //tekst
 		{
-			if (localParser->Variable_length-1 == 7)
+			if (PlocalParser->Variable_length-1 == 7)
  8002248:	687b      	ldr	r3, [r7, #4]
  800224a:	781b      	ldrb	r3, [r3, #0]
  800224c:	2b08      	cmp	r3, #8
  800224e:	d145      	bne.n	80022dc <LogicLayer_CommandSwitch+0x23c>
 			{
-				uint16_t x = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+				uint16_t x = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[1]), 1);
  8002250:	687b      	ldr	r3, [r7, #4]
  8002252:	3333      	adds	r3, #51	; 0x33
  8002254:	4618      	mov	r0, r3
@@ -4048,7 +4050,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  8002262:	f000 f919 	bl	8002498 <LogicLayer_intToAscii>
  8002266:	4603      	mov	r3, r0
  8002268:	84fb      	strh	r3, [r7, #38]	; 0x26
-				uint16_t y = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+				uint16_t y = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[2]), 2);
  800226a:	687b      	ldr	r3, [r7, #4]
  800226c:	3365      	adds	r3, #101	; 0x65
  800226e:	4618      	mov	r0, r3
@@ -4060,13 +4062,13 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  800227c:	f000 f90c 	bl	8002498 <LogicLayer_intToAscii>
  8002280:	4603      	mov	r3, r0
  8002282:	84bb      	strh	r3, [r7, #36]	; 0x24
-				uint8_t kleur = LogicLayer_ColourCheck(localParser, 3);
+				uint8_t kleur = LogicLayer_ColourCheck(PlocalParser, 3);
  8002284:	2103      	movs	r1, #3
  8002286:	6878      	ldr	r0, [r7, #4]
  8002288:	f000 f8c8 	bl	800241c <LogicLayer_ColourCheck>
  800228c:	4603      	mov	r3, r0
  800228e:	f887 3023 	strb.w	r3, [r7, #35]	; 0x23
-				uint8_t fontgrootte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
+				uint8_t fontgrootte = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[6]), 6);
  8002292:	687b      	ldr	r3, [r7, #4]
  8002294:	f203 132d 	addw	r3, r3, #301	; 0x12d
  8002298:	4618      	mov	r0, r3
@@ -4079,7 +4081,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  80022aa:	4603      	mov	r3, r0
  80022ac:	f887 3022 	strb.w	r3, [r7, #34]	; 0x22
 
-				API_draw_text(x, y, kleur, localParser->Parser_Message[4],localParser->Parser_Message[5], fontgrootte, localParser->Parser_Message[7]);
+				API_draw_text(x, y, kleur, PlocalParser->Parser_Message[4],PlocalParser->Parser_Message[5], fontgrootte, PlocalParser->Parser_Message[7]);
  80022b0:	687b      	ldr	r3, [r7, #4]
  80022b2:	f103 05c9 	add.w	r5, r3, #201	; 0xc9
  80022b6:	687b      	ldr	r3, [r7, #4]
@@ -4107,13 +4109,13 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 		case 4: //bitmap
 		{
 
-			if (localParser->Variable_length-1 == 3)
+			if (PlocalParser->Variable_length-1 == 3)
  80022e0:	687b      	ldr	r3, [r7, #4]
  80022e2:	781b      	ldrb	r3, [r3, #0]
  80022e4:	2b04      	cmp	r3, #4
  80022e6:	d121      	bne.n	800232c <LogicLayer_CommandSwitch+0x28c>
 			{
-				unsigned short x_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+				unsigned short x_lup = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[2]), 2);
  80022e8:	687b      	ldr	r3, [r7, #4]
  80022ea:	3365      	adds	r3, #101	; 0x65
  80022ec:	4618      	mov	r0, r3
@@ -4125,7 +4127,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  80022fa:	f000 f8cd 	bl	8002498 <LogicLayer_intToAscii>
  80022fe:	4603      	mov	r3, r0
  8002300:	857b      	strh	r3, [r7, #42]	; 0x2a
-				unsigned short y_lup = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
+				unsigned short y_lup = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[3]), 3);
  8002302:	687b      	ldr	r3, [r7, #4]
  8002304:	3397      	adds	r3, #151	; 0x97
  8002306:	4618      	mov	r0, r3
@@ -4138,7 +4140,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  8002318:	4603      	mov	r3, r0
  800231a:	853b      	strh	r3, [r7, #40]	; 0x28
 
-				API_read_bitmap_SD(localParser->Parser_Message[1], x_lup, y_lup);
+				API_read_bitmap_SD(PlocalParser->Parser_Message[1], x_lup, y_lup);
  800231c:	687b      	ldr	r3, [r7, #4]
  800231e:	3333      	adds	r3, #51	; 0x33
  8002320:	8d3a      	ldrh	r2, [r7, #40]	; 0x28
@@ -4156,14 +4158,14 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 
 		case 5: //clearscherm
 		{
-			if (localParser->Variable_length-1 == 1)
+			if (PlocalParser->Variable_length-1 == 1)
  8002330:	687b      	ldr	r3, [r7, #4]
  8002332:	781b      	ldrb	r3, [r3, #0]
  8002334:	2b02      	cmp	r3, #2
  8002336:	d10c      	bne.n	8002352 <LogicLayer_CommandSwitch+0x2b2>
 			{
 				unsigned char color;
-				color = LogicLayer_ColourCheck(localParser, 1);
+				color = LogicLayer_ColourCheck(PlocalParser, 1);
  8002338:	2101      	movs	r1, #1
  800233a:	6878      	ldr	r0, [r7, #4]
  800233c:	f000 f86e 	bl	800241c <LogicLayer_ColourCheck>
@@ -4182,13 +4184,13 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 
 		case 6:
 		{
-			if (localParser->Variable_length-1 == 1)
+			if (PlocalParser->Variable_length-1 == 1)
  8002352:	687b      	ldr	r3, [r7, #4]
  8002354:	781b      	ldrb	r3, [r3, #0]
  8002356:	2b02      	cmp	r3, #2
  8002358:	d111      	bne.n	800237e <LogicLayer_CommandSwitch+0x2de>
 			{
-				unsigned int msecs = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+				unsigned int msecs = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[1]), 1);
  800235a:	687b      	ldr	r3, [r7, #4]
  800235c:	3333      	adds	r3, #51	; 0x33
  800235e:	4618      	mov	r0, r3
@@ -4216,13 +4218,13 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 
 		case 8:
 		{
-			if (localParser->Variable_length-1 == 4)
+			if (PlocalParser->Variable_length-1 == 4)
  8002382:	687b      	ldr	r3, [r7, #4]
  8002384:	781b      	ldrb	r3, [r3, #0]
  8002386:	2b05      	cmp	r3, #5
  8002388:	d135      	bne.n	80023f6 <LogicLayer_CommandSwitch+0x356>
 			{
-				uint16_t x_c = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+				uint16_t x_c = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[1]), 1);
  800238a:	687b      	ldr	r3, [r7, #4]
  800238c:	3333      	adds	r3, #51	; 0x33
  800238e:	4618      	mov	r0, r3
@@ -4234,7 +4236,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  800239c:	f000 f87c 	bl	8002498 <LogicLayer_intToAscii>
  80023a0:	4603      	mov	r3, r0
  80023a2:	86fb      	strh	r3, [r7, #54]	; 0x36
-				uint16_t y_c = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+				uint16_t y_c = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[2]), 2);
  80023a4:	687b      	ldr	r3, [r7, #4]
  80023a6:	3365      	adds	r3, #101	; 0x65
  80023a8:	4618      	mov	r0, r3
@@ -4246,7 +4248,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  80023b6:	f000 f86f 	bl	8002498 <LogicLayer_intToAscii>
  80023ba:	4603      	mov	r3, r0
  80023bc:	86bb      	strh	r3, [r7, #52]	; 0x34
-				uint16_t radius = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
+				uint16_t radius = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[3]), 3);
  80023be:	687b      	ldr	r3, [r7, #4]
  80023c0:	3397      	adds	r3, #151	; 0x97
  80023c2:	4618      	mov	r0, r3
@@ -4258,7 +4260,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  80023d0:	f000 f862 	bl	8002498 <LogicLayer_intToAscii>
  80023d4:	4603      	mov	r3, r0
  80023d6:	867b      	strh	r3, [r7, #50]	; 0x32
-				uint8_t color = LogicLayer_ColourCheck(localParser, 4);
+				uint8_t color = LogicLayer_ColourCheck(PlocalParser, 4);
  80023d8:	2104      	movs	r1, #4
  80023da:	6878      	ldr	r0, [r7, #4]
  80023dc:	f000 f81e 	bl	800241c <LogicLayer_ColourCheck>
@@ -4282,7 +4284,7 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 
 		case 9:
 		{
-			if (localParser->Variable_length-1 == 1)
+			if (PlocalParser->Variable_length-1 == 1)
  80023fa:	687b      	ldr	r3, [r7, #4]
  80023fc:	781b      	ldrb	r3, [r3, #0]
  80023fe:	2b02      	cmp	r3, #2
@@ -4316,8 +4318,11 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
  800241a:	bf00      	nop
 
 0800241c <LogicLayer_ColourCheck>:
-
-int LogicLayer_ColourCheck(Message_parser* localParser, unsigned char StructLocation)
+ *
+ * @return returned nul tenzij de kleur niet is gevonden
+ *
+ *****************************************************************************/
+int LogicLayer_ColourCheck(Message_parser* PlocalParser, unsigned char StructLocation)
 {
  800241c:	b580      	push	{r7, lr}
  800241e:	b084      	sub	sp, #16
@@ -4341,7 +4346,7 @@ int LogicLayer_ColourCheck(Message_parser* localParser, unsigned char StructLoca
  8002436:	60fb      	str	r3, [r7, #12]
  8002438:	e020      	b.n	800247c <LogicLayer_ColourCheck+0x60>
 	{
-		stringCheck = strcmp(localParser->Parser_Message[StructLocation],message_col_string[i-1]);
+		stringCheck = strcmp(PlocalParser->Parser_Message[StructLocation],message_col_string[i-1]);
  800243a:	78fb      	ldrb	r3, [r7, #3]
  800243c:	2232      	movs	r2, #50	; 0x32
  800243e:	fb02 f303 	mul.w	r3, r2, r3
@@ -4398,8 +4403,11 @@ int LogicLayer_ColourCheck(Message_parser* localParser, unsigned char StructLoca
  8002494:	08015850 	.word	0x08015850
 
 08002498 <LogicLayer_intToAscii>:
-
-unsigned int LogicLayer_intToAscii(Message_parser* localParser, int numbersize, int StructLocation)
+ *
+ * @return returned nul tenzij de gegeven waardes geen cijfer is
+ *
+ *****************************************************************************/
+unsigned int LogicLayer_intToAscii(Message_parser* PlocalParser, int numbersize, int StructLocation)
 {
  8002498:	b480      	push	{r7}
  800249a:	b089      	sub	sp, #36	; 0x24
@@ -4416,13 +4424,14 @@ unsigned int LogicLayer_intToAscii(Message_parser* localParser, int numbersize, 
 	unsigned int decimalvalue = 0;
  80024ac:	2300      	movs	r3, #0
  80024ae:	61bb      	str	r3, [r7, #24]
+
 	for (i = 0; i < numbersize; i++)
  80024b0:	2300      	movs	r3, #0
  80024b2:	77fb      	strb	r3, [r7, #31]
  80024b4:	e020      	b.n	80024f8 <LogicLayer_intToAscii+0x60>
 	{
 
-			DecimalshiftBuff = localParser->Parser_Message[StructLocation][i];	// making sure array doesnt have a negative number
+		DecimalshiftBuff = PlocalParser->Parser_Message[StructLocation][i];	// making sure array doesnt have a negative number
  80024b6:	7ffb      	ldrb	r3, [r7, #31]
  80024b8:	68f9      	ldr	r1, [r7, #12]
  80024ba:	687a      	ldr	r2, [r7, #4]
@@ -4433,7 +4442,7 @@ unsigned int LogicLayer_intToAscii(Message_parser* localParser, int numbersize, 
  80024c6:	3301      	adds	r3, #1
  80024c8:	781b      	ldrb	r3, [r3, #0]
  80024ca:	75fb      	strb	r3, [r7, #23]
-			if (DecimalshiftBuff < '0' ||  DecimalshiftBuff > '9')
+		if (DecimalshiftBuff < '0' ||  DecimalshiftBuff > '9')
  80024cc:	7dfb      	ldrb	r3, [r7, #23]
  80024ce:	2b2f      	cmp	r3, #47	; 0x2f
  80024d0:	d90f      	bls.n	80024f2 <LogicLayer_intToAscii+0x5a>
@@ -4443,7 +4452,7 @@ unsigned int LogicLayer_intToAscii(Message_parser* localParser, int numbersize, 
 		{
 
 		}
-			else
+		else
 		{
 			DecimalshiftBuff -= '0';
  80024d8:	7dfb      	ldrb	r3, [r7, #23]
