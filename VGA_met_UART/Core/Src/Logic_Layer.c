@@ -320,6 +320,10 @@ int LogicLayer_CommandSwitch(Message_parser* PlocalParser, unsigned char Command
 			return 0;
 		}
 
+		case 10:
+		{
+			API_err_handler(HELP);
+		}
 		default:
 		{
 			API_err_handler(NO_ERROR);

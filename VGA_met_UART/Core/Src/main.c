@@ -64,7 +64,6 @@ volatile char container[1024];
 volatile int temp;
 volatile int key;
 int err;
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -142,14 +141,12 @@ int main(void)
   HAL_UART_Receive_IT(&huart2, input.byte_buffer_rx, LINE_BUFLEN);
 
   int Test = 0;
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
 	  if(input.command_execute_flag == TRUE)
 	  {
 		  Debugging = LogicLayer_Parser(input.line_rx_buffer, LINE_BUFLEN);

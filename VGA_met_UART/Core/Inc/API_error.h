@@ -24,7 +24,7 @@
 #define	NO_COMMA_DETECTED		0x0F //er zijn , nodig om de variabelen uit elkaar te halen. deze is nu niet aanwezig
 #define	NOT_VALID_CHAR			0x10 //de char die in de zin staat, staat niet in de mogelijke char'ss
 #define NO_END_TERMINATOR		0x11 //het bericht dat verzonden wordt heeft geen string terminator '\0'
-
+#define HELP					0x12 //help message word gevraagd
  #ifdef __cplusplus
 }
 #endif

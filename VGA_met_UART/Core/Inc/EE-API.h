@@ -57,9 +57,9 @@ int API_read_bitmap_SD(char*, uint16_t, uint16_t);
 
 void API_clear_screen(uint8_t);
 
-int API_draw_rectangle(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t, uint8_t);
+void API_draw_rectangle(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t, uint8_t);
 
-int API_draw_circle(uint16_t , uint16_t , uint16_t , uint8_t);
+void API_draw_circle(uint16_t , uint16_t , uint16_t , uint8_t);
 
 int API_blur_screen();
 
