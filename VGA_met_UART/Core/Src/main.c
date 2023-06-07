@@ -192,6 +192,11 @@ int main(void)
 		  // When finished reset the flag
 		  input.command_execute_flag = FALSE;
 	  }
+	  if(API_err_code != 0x00)
+	  {
+		  API_err_handler();
+		  //clear screen maybe?
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

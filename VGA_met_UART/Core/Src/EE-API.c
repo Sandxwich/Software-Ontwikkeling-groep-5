@@ -41,7 +41,8 @@ int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_
 	{
 		steps = abs(dy);
 	}
-
+	else if(abs(dx)==abs(dy))
+		steps = abs(dy);
 	float xIncrement = (float) dx / steps;
 	float yIncrement = (float) dy / steps;
 	int i;
@@ -212,23 +213,45 @@ uint16_t * draw_normal_letter(unsigned char letter, unsigned char letter_type, u
     int width;
     const uint8_t* glyph;
     int start_letter;
-
-    if(letter_type == ARIAL)
-    {
-    	start_letter= arial_glyph_dsc[letter-32][1];
-		glyph = &arial_glyph_bitmap[start_letter];
-		width = arial_glyph_dsc[letter-32][0];
-    }
-    else if(letter_type == CONSOLAS)
+	uint8_t bitmap_height;
+	if(letter_type == ARIAL)
 	{
-    	start_letter= consolas_glyph_dsc[letter-32][1];
-		glyph = &consolas_glyph_bitmap[start_letter];
-		width = consolas_glyph_dsc[letter-32][0];
+		if(fontgrootte == SIZE_1)
+		{
+			start_letter= arial_24_glyph_dsc[letter-32][1];
+			glyph = &arial_24_glyph_bitmap[start_letter];
+			width = arial_24_glyph_dsc[letter-32][0];
+			bitmap_height = LETTER_SIZE_1_HEIGHT;
+		}
+		else if(fontgrootte == SIZE_2)
+		{
+			start_letter= arial_glyph_dsc[letter-32][1];
+			glyph = &arial_glyph_bitmap[start_letter];
+			width = arial_glyph_dsc[letter-32][0];
+			bitmap_height = LETTER_SIZE_2_HEIGHT;
+		}
+	}
+	else if(letter_type == CONSOLAS)
+	{
+		if(fontgrootte == SIZE_1)
+		{
+			start_letter= consolas_24_glyph_dsc[letter-32][1];
+			glyph = &consolas_24_glyph_bitmap[start_letter];
+			width = consolas_24_glyph_dsc[letter-32][0];
+			bitmap_height = LETTER_SIZE_1_HEIGHT;
+		}
+		else if(fontgrootte == SIZE_2)
+		{
+			start_letter= consolas_glyph_dsc[letter-32][1];
+			glyph = &consolas_glyph_bitmap[start_letter];
+			width = consolas_glyph_dsc[letter-32][0];
+			bitmap_height = LETTER_SIZE_2_HEIGHT;
+		}
 	}
     //next line test
         if(xd+width >= VGA_DISPLAY_X)
         {
-        	yd+=LETTER_BITMAP_HEIGHT;
+        	yd+=bitmap_height;
         	begin_x=5;//sets x value to the left +5 pixels
         }
     //end test
@@ -237,7 +260,7 @@ uint16_t * draw_normal_letter(unsigned char letter, unsigned char letter_type, u
     width = (width/8);
 
 
-    for (y_counter = 0; y_counter < LETTER_BITMAP_HEIGHT; y_counter++) //goes trough every vertical layer of the bitmap
+    for (y_counter = 0; y_counter < bitmap_height; y_counter++) //goes trough every vertical layer of the bitmap
     {
         xd = begin_x;
         for (x_counter = 0; x_counter < width; x_counter++) //goes trough every horizontal layer of the bitmap
@@ -250,11 +273,9 @@ uint16_t * draw_normal_letter(unsigned char letter, unsigned char letter_type, u
         	}
         }
         yd++;
-        if (fontgrootte == SIZE_1)//skips one pixel of bitmap to shorten the letter by half
-            y_counter++;
     }
     end_cords[0] = xd;
-    end_cords[1] = yd-LETTER_BITMAP_HEIGHT;
+    end_cords[1] = yd-bitmap_height;
     cord_p = end_cords;
     return cord_p;
 }
@@ -269,23 +290,45 @@ uint16_t * draw_cursive_letter(unsigned char letter, unsigned char letter_type, 
 	const uint8_t* glyph;
 	int start_letter;
 	int angle;
-
+	uint8_t bitmap_height;
 	if(letter_type == ARIAL)
 	{
-		start_letter= arial_glyph_dsc[letter-32][1];
-		glyph = &arial_glyph_bitmap[start_letter];
-		width = arial_glyph_dsc[letter-32][0];
+		if(fontgrootte == SIZE_1)
+		{
+			start_letter= arial_24_glyph_dsc[letter-32][1];
+			glyph = &arial_24_glyph_bitmap[start_letter];
+			width = arial_24_glyph_dsc[letter-32][0];
+			bitmap_height = LETTER_SIZE_1_HEIGHT;
+		}
+		else if(fontgrootte == SIZE_2)
+		{
+			start_letter= arial_glyph_dsc[letter-32][1];
+			glyph = &arial_glyph_bitmap[start_letter];
+			width = arial_glyph_dsc[letter-32][0];
+			bitmap_height = LETTER_SIZE_2_HEIGHT;
+		}
 	}
 	else if(letter_type == CONSOLAS)
 	{
-		start_letter= consolas_glyph_dsc[letter-32][1];
-		glyph = &consolas_glyph_bitmap[start_letter];
-		width = consolas_glyph_dsc[letter-32][0];
+		if(fontgrootte == SIZE_1)
+		{
+			start_letter= consolas_24_glyph_dsc[letter-32][1];
+			glyph = &consolas_24_glyph_bitmap[start_letter];
+			width = consolas_24_glyph_dsc[letter-32][0];
+			bitmap_height = LETTER_SIZE_1_HEIGHT;
+		}
+		else if(fontgrootte == SIZE_2)
+		{
+			start_letter= consolas_glyph_dsc[letter-32][1];
+			glyph = &consolas_glyph_bitmap[start_letter];
+			width = consolas_glyph_dsc[letter-32][0];
+			bitmap_height = LETTER_SIZE_2_HEIGHT;
+		}
 	}
 	//next line test
 		if(xd+width*2 >= VGA_DISPLAY_X)
 		{
-			yd+=LETTER_BITMAP_HEIGHT;
+			yd+=bitmap_height;
 			begin_x=5;//sets x value to the left +5 pixels
 		}
 	//end test
@@ -295,7 +338,7 @@ uint16_t * draw_cursive_letter(unsigned char letter, unsigned char letter_type, 
 	if(fontgrootte == SIZE_1)
 		angle = angle/2;
 	width = (width/8);
-	for(y_counter = 0; y_counter < LETTER_BITMAP_HEIGHT; y_counter++)
+	for(y_counter = 0; y_counter < bitmap_height; y_counter++)
 	{
 		xd = begin_x;
 		for(x_counter = 0; x_counter < width; x_counter++)
@@ -309,11 +352,9 @@ uint16_t * draw_cursive_letter(unsigned char letter, unsigned char letter_type, 
 		}
 		angle--; //decreases offset for each y layer to create an angle
 		yd++;
-		if(fontgrootte == SIZE_1)
-			y_counter++;
 	}
 	end_cords[0] = xd;
-    end_cords[1] = yd-LETTER_BITMAP_HEIGHT;
+    end_cords[1] = yd-bitmap_height;
     cord_p = end_cords;
     return cord_p;
 }
@@ -328,31 +369,56 @@ uint16_t * draw_fat_letter(unsigned char letter, unsigned char letter_type, uint
 	int width;
 	const uint8_t* glyph;
 	int start_letter;
+	uint8_t bitmap_height;
 
 	if(letter_type == ARIAL)
 	{
-		start_letter= arial_glyph_dsc[letter-32][1];
-		glyph = &arial_glyph_bitmap[start_letter];
-		width = arial_glyph_dsc[letter-32][0];
+		if(fontgrootte == SIZE_1)
+		{
+			start_letter= arial_24_glyph_dsc[letter-32][1];
+			glyph = &arial_24_glyph_bitmap[start_letter];
+			width = arial_24_glyph_dsc[letter-32][0];
+			bitmap_height = LETTER_SIZE_1_HEIGHT;
+		}
+		else if(fontgrootte == SIZE_2)
+		{
+			start_letter= arial_glyph_dsc[letter-32][1];
+			glyph = &arial_glyph_bitmap[start_letter];
+			width = arial_glyph_dsc[letter-32][0];
+			bitmap_height = LETTER_SIZE_2_HEIGHT;
+		}
 	}
 	else if(letter_type == CONSOLAS)
 	{
-		start_letter= consolas_glyph_dsc[letter-32][1];
-		glyph = &consolas_glyph_bitmap[start_letter];
-		width = consolas_glyph_dsc[letter-32][0];
+		if(fontgrootte == SIZE_1)
+		{
+			start_letter= consolas_24_glyph_dsc[letter-32][1];
+			glyph = &consolas_24_glyph_bitmap[start_letter];
+			width = consolas_24_glyph_dsc[letter-32][0];
+			bitmap_height = LETTER_SIZE_1_HEIGHT;
+		}
+		else if(fontgrootte == SIZE_2)
+		{
+			start_letter= consolas_glyph_dsc[letter-32][1];
+			glyph = &consolas_glyph_bitmap[start_letter];
+			width = consolas_glyph_dsc[letter-32][0];
+			bitmap_height = LETTER_SIZE_2_HEIGHT;
+		}
 	}
 	//next line test
 	if(xd+width+THICKNESS >= VGA_DISPLAY_X)
 	{
-		yd+=LETTER_BITMAP_HEIGHT;
+		yd+=bitmap_height;
 		begin_x=5;//sets x value to the left +5 pixels
 	}
 //end test
 	if(width%8)
 		width += 8;
 	width = (width/8);
+	if(width == 0)
+		width++;
 
-	for (y_counter = 0; y_counter < LETTER_BITMAP_HEIGHT; y_counter++) //goes trough every vertical layer of the bitmap
+	for (y_counter = 0; y_counter < bitmap_height; y_counter++) //goes trough every vertical layer of the bitmap
 	{
 		xd = begin_x;
 		for (x_counter = 0; x_counter < width; x_counter++) //goes trough every horizontal layer of the bitmap
@@ -372,11 +438,9 @@ uint16_t * draw_fat_letter(unsigned char letter, unsigned char letter_type, uint
 			}
 		}
 		yd++;
-		if (fontgrootte == SIZE_1)//skips one pixel of bitmap to shorten the letter by half
-			y_counter++;
 	}
 	end_cords[0] = xd;
-    end_cords[1] = yd-LETTER_BITMAP_HEIGHT;
+    end_cords[1] = yd-bitmap_height;
     cord_p = end_cords;
 	return cord_p;
 }
@@ -567,8 +631,43 @@ unsigned int wacht(uint16_t msecs)
 	return 1;
 }
 
-
-
-
-
+void API_err_handler()
+{
+	switch(API_err_code)
+	{
+	case INVALID_MESSAGE:
+		printf("dit bericht is niet volgens de richtlijnen, type help voor meer informatie");
+		break;
+	case X_OUT_OF_BOUNDS:
+		printf("Een van de ingevulde X coördinaten is niet geldig, X mag niet groter zijn dan 320");
+		break;
+	case Y_OUT_OF_BOUNDS:
+		printf("Een van de ingevulde Y coördinaten is niet geldig, X mag niet groter zijn dan 240");
+		break;
+	case NOT_A_NUMBER:
+		break;
+	case NOT_A_CHARACTER:
+		break;
+	case UNKNOWN_COLOR:
+		break;
+	case UNKNOWN_BITMAP:
+		break;
+	case UNKNOWN_FONT:
+		break;
+	case UNKNOWN_FONT_SIZE:
+		break;
+	case UNKNOWN_FONT_STYLE:
+		break;
+	case UNKNOWN_FUNCTION:
+		break;
+	case Y_TO_HIGH:
+		break;
+	case X_TO_HIGH:
+		break;
+	case NO_SD_CARD_DETECTED:
+		break;
+	case NO_COMMA_DETECTED:
+		break;
+	}
+}
 
