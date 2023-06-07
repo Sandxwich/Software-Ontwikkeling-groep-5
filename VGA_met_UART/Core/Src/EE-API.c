@@ -29,11 +29,15 @@ int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_
 	int dx = x_2 - x_1;
 	int dy = y_2 - y_1;
 	int steps;
-	if(abs(dx)>abs(dy))
+	if(dx>dy)
 	{
 		steps = abs(dx);
 	}
-	else if(abs(dy)>abs(dx))
+	else if(dy>dx)
+	{
+		steps = abs(dy);
+	}
+	else if (dx == dy)
 	{
 		steps = abs(dy);
 	}

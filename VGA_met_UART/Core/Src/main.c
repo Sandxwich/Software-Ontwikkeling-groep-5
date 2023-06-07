@@ -162,7 +162,6 @@ int main(void)
 
 	  if(input.command_execute_flag == TRUE)
 	  {
-	//	  API_read_bitmap_SD(&input.line_rx_buffer, j, 0);
 		  Debugging = LogicLayer_Parser(input.line_rx_buffer, LINE_BUFLEN);
 		  Test = LogicLayer_CommandCheck(&Debugging);
 		  if (Test == 0)
@@ -174,7 +173,11 @@ int main(void)
 			  LogicLayer_CommandSwitch(&Debugging, Test);
 
 		  }
-
+		  for(i = 0; i < LINE_BUFLEN; i++)
+			  input.line_rx_buffer[i] = 0;
+		  for (i = 0; i < BUFFER_LEN; i++)
+			  for (int j = 0; j < BUFFER_LEN; j++)
+				  Debugging.Parser_Message[i][j] = 0;
 
 
 
