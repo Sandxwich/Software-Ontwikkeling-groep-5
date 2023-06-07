@@ -64,7 +64,6 @@ volatile char container[1024];
 volatile int temp;
 volatile int key;
 int err;
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -127,17 +126,7 @@ int main(void)
   UB_VGA_Screen_Init(); // Init VGA-Screen
 
   UB_VGA_FillScreen(VGA_COL_BLACK);
-  UB_VGA_SetPixel(10,10,10);
-  UB_VGA_SetPixel(0,0,0x00);
-  UB_VGA_SetPixel(319,0,0x00);
-
-
-
-
   unsigned int i = 0;
-
-
-
   for(i = 0; i < LINE_BUFLEN; i++)
 	  input.line_rx_buffer[i] = 0;
 
@@ -152,17 +141,14 @@ int main(void)
   HAL_UART_Receive_IT(&huart2, input.byte_buffer_rx, LINE_BUFLEN);
 
   int Test = 0;
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
 	  if(input.command_execute_flag == TRUE)
 	  {
-	//	  API_read_bitmap_SD(&input.line_rx_buffer, j, 0);
 		  Debugging = LogicLayer_Parser(input.line_rx_buffer, LINE_BUFLEN);
 		  Test = LogicLayer_CommandCheck(&Debugging);
 		  if (Test == 0)
@@ -172,20 +158,12 @@ int main(void)
 		  else
 		  {
 			  LogicLayer_CommandSwitch(&Debugging, Test);
-
 		  }
-
-
-
-
-
-
-
-		  // Do some stuff
-		  printf("yes\n");
-		  //UB_VGA_FillScreen(colorTest);
-
-
+		  for(i = 0; i < LINE_BUFLEN; i++)
+			  input.line_rx_buffer[i] = 0;
+		  for (i = 0; i < ARGUMENTEN_LEN; i++)
+			  for (int j = 0; j < BUFFER_LEN_PARSER; j++)
+				  Debugging.Parser_Message[i][j] = 0;
 		  // When finished reset the flag
 		  input.command_execute_flag = FALSE;
 	  }
