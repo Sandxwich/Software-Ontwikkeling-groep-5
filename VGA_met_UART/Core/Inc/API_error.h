@@ -21,10 +21,11 @@
 #define Y_TO_HIGH				0X0C //figuur dat getekent word zal buiten de y-as van het scherm belanden
 #define X_TO_HIGH				0X0D //figuur dat getekent word zal buiten de x-as van het scherm belanden
 #define NO_SD_CARD_DETECTED		0x0E //er is geen SD kaart gevonden. check SD slot
-#define	NO_COMMA_DETECTED		0x10 //er zijn , nodig om de variabelen uit elkaar te halen. deze is nu niet aanwezig
-#define	NOT_VALID_CHAR			0x11 //de char die in de zin staat, staat niet in de mogelijke char'ss
+#define	NO_COMMA_DETECTED		0x0F //er zijn , nodig om de variabelen uit elkaar te halen. deze is nu niet aanwezig
+#define	NOT_VALID_CHAR			0x10 //de char die in de zin staat, staat niet in de mogelijke char'ss
+#define NO_END_TERMINATOR		0x11 //het bericht dat verzonden wordt heeft geen string terminator '\0'
 
-#ifdef __cplusplus
+ #ifdef __cplusplus
 }
 #endif
 #endif /*ERROR */

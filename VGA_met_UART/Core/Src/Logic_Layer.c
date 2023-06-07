@@ -44,7 +44,7 @@ Message_parser LogicLayer_Parser(char *PMessage, unsigned int Messagelength)
 
 			  if (i > Messagelength) // Error detectie tegen oneindige while loop
 			  {
-				  printf("Error , not detected \n");
+				  API_err_handler(NO_COMMA_DETECTED);
 				  break;
 			  }
 		  }
@@ -70,7 +70,7 @@ Message_parser LogicLayer_Parser(char *PMessage, unsigned int Messagelength)
 
 	  	  if (k > BUFFER_LEN) // Error detectie tegen oneindige while loop
 	  	  	  {
-	  		  	  printf("Error no message end detected \n");
+	  		  	  API_err_handler(NO_END_TERMINATOR);
 	  		  	  break;
 	  	  	  }
 
@@ -110,7 +110,8 @@ int LogicLayer_CommandCheck(Message_parser* PlocalParser)
 	{
 		return stringCorrect;
 	}
-	else API_err_handler(UNKNOWN_FUNCTION);
+	else
+		API_err_handler(UNKNOWN_FUNCTION);
 	return 0;
 }
 
@@ -134,18 +135,29 @@ int LogicLayer_CommandSwitch(Message_parser* PlocalParser, unsigned char Command
 			{
 				unsigned short x_1, y_1, x_2, y_2;
 				unsigned char dikte, color;
-
-			x_1 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
-			y_1 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
-			x_2 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[3]), 3);
-			y_2 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[4]), 4);
-			color = LogicLayer_ColourCheck(localParser, 5);
-			dikte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
-			API_draw_line(x_1, y_1, x_2, y_2, dikte, color);
-			return 0;
-			break;
+				x_1 = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[1]), 1);
+				y_1 = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[2]), 2);
+				x_2 = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[3]), 3);
+				y_2 = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[4]), 4);
+				color = LogicLayer_ColourCheck(PlocalParser, 5);
+				dikte = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[6]), 6);
+				if(x_1 > VGA_DISPLAY_X || x_2 > VGA_DISPLAY_X)
+				{
+					API_err_handler(X_OUT_OF_BOUNDS);
+					return 0;
+				}
+				if(y_1 > VGA_DISPLAY_Y || y_2 > VGA_DISPLAY_Y)
+				{
+					API_err_handler(Y_OUT_OF_BOUNDS);
+					return 0;
+				}
+				API_draw_line(x_1, y_1, x_2, y_2, dikte, color);
+				return 0;
+				break;
 			}
-			else API_err_handler(INVALID_MESSAGE);
+			else
+				API_err_handler(INVALID_MESSAGE);
+			return 0;
 		}
 
 		case 2:	//rechthoek
@@ -154,21 +166,40 @@ int LogicLayer_CommandSwitch(Message_parser* PlocalParser, unsigned char Command
 			{
 				unsigned short x_lup,  y_lup,  breedte,  hoogte;
 				unsigned char color, gevuld;
-
-
 				x_lup = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[1]), 1);
 				y_lup = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[2]), 2);
 				breedte = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[3]), 3);
 				hoogte = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[4]), 4);
-
 				color = LogicLayer_ColourCheck(PlocalParser, 5);
 				gevuld = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[6]), 6);
+				if(x_lup > VGA_DISPLAY_X)
+				{
+					API_err_handler(X_OUT_OF_BOUNDS);
+					return 0;
+				}
+				if(x_lup+breedte > VGA_DISPLAY_X)
+				{
+					API_err_handler(X_TO_HIGH);
+					return 0;
+				}
+				if(y_lup > VGA_DISPLAY_Y)
+				{
+					API_err_handler(Y_OUT_OF_BOUNDS);
+					return 0;
+				}
+				if(y_lup+hoogte > VGA_DISPLAY_Y)
+				{
+					API_err_handler(Y_TO_HIGH);
+					return 0;
+				}
 
 				API_draw_rectangle(x_lup, y_lup, breedte, hoogte, color, gevuld);
 
 				break;
 			}
-			else return 0;
+			else
+				API_err_handler(INVALID_MESSAGE);
+			return 0;
 		}
 
 		case 3: //tekst
@@ -183,7 +214,9 @@ int LogicLayer_CommandSwitch(Message_parser* PlocalParser, unsigned char Command
 				API_draw_text(x, y, kleur, PlocalParser->Parser_Message[4],PlocalParser->Parser_Message[5], fontgrootte, PlocalParser->Parser_Message[7]);
 				break;
 			}
-			else return 0;
+			else
+				API_err_handler(INVALID_MESSAGE);
+			return 0;
 		}
 
 		case 4: //bitmap
@@ -193,11 +226,22 @@ int LogicLayer_CommandSwitch(Message_parser* PlocalParser, unsigned char Command
 			{
 				unsigned short x_lup = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[2]), 2);
 				unsigned short y_lup = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[3]), 3);
-
+				if(x_lup > VGA_DISPLAY_X)
+				{
+					API_err_handler(X_OUT_OF_BOUNDS);
+					return 0;
+				}
+				if(y_lup > VGA_DISPLAY_Y)
+				{
+					API_err_handler(Y_OUT_OF_BOUNDS);
+					return 0;
+				}
 				API_read_bitmap_SD(PlocalParser->Parser_Message[1], x_lup, y_lup);
 				break;
 			}
-			else return 0;
+			else
+				API_err_handler(INVALID_MESSAGE);
+			return 0;
 		}
 
 		case 5: //clearscherm
@@ -206,11 +250,12 @@ int LogicLayer_CommandSwitch(Message_parser* PlocalParser, unsigned char Command
 			{
 				unsigned char color;
 				color = LogicLayer_ColourCheck(PlocalParser, 1);
-
 				UB_VGA_FillScreen(color);
-
 				break;
 			}
+			else
+				API_err_handler(INVALID_MESSAGE);
+			return 0;
 		}
 
 		case 6:
@@ -218,12 +263,12 @@ int LogicLayer_CommandSwitch(Message_parser* PlocalParser, unsigned char Command
 			if (PlocalParser->Variable_length-1 == 1)
 			{
 				unsigned int msecs = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[1]), 1);
-
-				wacht(msecs);
-
+				API_wacht(msecs);
 				break;
 			}
-			else return 0;
+			else
+				API_err_handler(INVALID_MESSAGE);
+			return 0;
 		}
 
 		case 8:
@@ -234,12 +279,33 @@ int LogicLayer_CommandSwitch(Message_parser* PlocalParser, unsigned char Command
 				uint16_t y_c = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[2]), 2);
 				uint16_t radius = LogicLayer_intToAscii(PlocalParser, strlen(PlocalParser->Parser_Message[3]), 3);
 				uint8_t color = LogicLayer_ColourCheck(PlocalParser, 4);
-
+				if(x_c > VGA_DISPLAY_X)
+				{
+					API_err_handler(X_OUT_OF_BOUNDS);
+					return 0;
+				}
+				if(x_c+radius > VGA_DISPLAY_X || x_c-radius < 0)
+				{
+					API_err_handler(X_TO_HIGH);
+					return 0;
+				}
+				if(y_c > VGA_DISPLAY_Y)
+				{
+					API_err_handler(Y_OUT_OF_BOUNDS);
+					return 0;
+				}
+				if(y_c+radius > VGA_DISPLAY_Y || y_c-radius < 0)
+				{
+					API_err_handler(Y_TO_HIGH);
+					return 0;
+				}
 				API_draw_circle(x_c, y_c, radius, color);
 
 				break;
 			}
-			else return 0;
+			else
+				API_err_handler(INVALID_MESSAGE);
+			return 0;
 		}
 
 		case 9:
@@ -247,15 +313,16 @@ int LogicLayer_CommandSwitch(Message_parser* PlocalParser, unsigned char Command
 			if (PlocalParser->Variable_length-1 == 1)
 			{
 				API_blur_screen();
-
 				break;
 			}
-			else return 0;
+			else
+				API_err_handler(INVALID_MESSAGE);
+			return 0;
 		}
 
 		default:
 		{
-			API_err_handler(NO_ERROR)
+			API_err_handler(NO_ERROR);
 			return 0;
 		}
 	}
@@ -288,7 +355,7 @@ int LogicLayer_ColourCheck(Message_parser* PlocalParser, unsigned char StructLoc
 		}
 	}
 
-
+	API_err_handler(UNKNOWN_COLOR);
 	return 0;
 
 }

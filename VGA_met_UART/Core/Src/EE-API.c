@@ -22,10 +22,6 @@
 int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_t dikte, uint8_t color)
 {
 	int error = 0;
-	//error checks
-//	if(checkcolor(color))
-//		return error;
-
 	int dx = x_2 - x_1;
 	int dy = y_2 - y_1;
 	int steps;
@@ -61,7 +57,7 @@ int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_
 	return error;
 }
 
-int API_clear_screen(uint8_t color)
+void API_clear_screen(uint8_t color)
 {
 	UB_VGA_FillScreen(color);
 }
@@ -149,32 +145,45 @@ int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* font
 	else
 	{
 		API_err_handler(UNKNOWN_FONT);
+		return 0;
 	}
 	for(i = 0; tekst[i] != '\0'; i++)
 	{
+		if(tekst[i] < ASCII_START ||tekst[i] > 127)
+		{
+			API_err_handler(NOT_VALID_CHAR);
+			return 0;
+		}
 		switch(fontstijl[0])
 		{
 		case 'n':
 			cord_p = draw_normal_letter(tekst[i], letter_style, xd, yd, fontgrootte, kleur, cord_p);
+			if(cord_p == 0)
+				return 0;
 			xd = cord_p[0];
 			yd = cord_p[1];
 			break;
 		case 'v':
 			cord_p = draw_fat_letter(tekst[i], letter_style, xd, yd, fontgrootte, kleur, cord_p);
+			if(cord_p == 0)
+				return 0;
 			xd = cord_p[0];
 			yd = cord_p[1];
 			break;
 		case 'c':
 			cord_p = draw_cursive_letter(tekst[i], letter_style, xd, yd, fontgrootte, kleur, cord_p);
+			if(cord_p == 0)
+				return 0;
 			xd = cord_p[0];
 			yd = cord_p[1];
 			break;
 		default:
 			API_err_handler(UNKNOWN_FONT_STYLE);
+			return 0;
 			break;
 		}
 	}
-	return 0;//returns error
+	return 0;
 }
 
 uint16_t * draw_normal_letter(unsigned char letter, unsigned char letter_type, uint16_t xd, uint16_t yd,uint8_t fontgrootte, uint8_t kleur, uint16_t* cord_p)
@@ -191,9 +200,9 @@ uint16_t * draw_normal_letter(unsigned char letter, unsigned char letter_type, u
 	{
 		if(fontgrootte == SIZE_1)
 		{
-			start_letter= arial_24_glyph_dsc[letter-32][1];
+			start_letter= arial_24_glyph_dsc[letter-ASCII_START][1];
 			glyph = &arial_24_glyph_bitmap[start_letter];
-			width = arial_24_glyph_dsc[letter-32][0];
+			width = arial_24_glyph_dsc[letter-ASCII_START][0];
 			bitmap_height = LETTER_SIZE_1_HEIGHT;
 		}
 		else if(fontgrootte == SIZE_2)
@@ -202,6 +211,11 @@ uint16_t * draw_normal_letter(unsigned char letter, unsigned char letter_type, u
 			glyph = &arial_glyph_bitmap[start_letter];
 			width = arial_glyph_dsc[letter-32][0];
 			bitmap_height = LETTER_SIZE_2_HEIGHT;
+		}
+		else
+		{
+			API_err_handler(UNKNOWN_FONT_SIZE);
+			return 0;
 		}
 	}
 	else if(letter_type == CONSOLAS)
@@ -220,14 +234,22 @@ uint16_t * draw_normal_letter(unsigned char letter, unsigned char letter_type, u
 			width = consolas_glyph_dsc[letter-32][0];
 			bitmap_height = LETTER_SIZE_2_HEIGHT;
 		}
+		else
+		{
+			API_err_handler(UNKNOWN_FONT_SIZE);
+			return 0;
+		}
 	}
-    //next line test
-        if(xd+width >= VGA_DISPLAY_X)
-        {
-        	yd+=bitmap_height;
-        	begin_x=5;//sets x value to the left +5 pixels
-        }
-    //end test
+	if(xd+width >= VGA_DISPLAY_X)
+	{
+		yd+=bitmap_height;
+		begin_x=5;//sets x value to the left +5 pixels
+	}
+	if(yd >= VGA_DISPLAY_Y)
+	{
+		API_err_handler(Y_TO_HIGH);
+		return 0;
+	}
     if(width%8)
     	width += 8;
     width = (width/8);
@@ -280,6 +302,11 @@ uint16_t * draw_cursive_letter(unsigned char letter, unsigned char letter_type, 
 			width = arial_glyph_dsc[letter-32][0];
 			bitmap_height = LETTER_SIZE_2_HEIGHT;
 		}
+		else
+		{
+			API_err_handler(UNKNOWN_FONT_SIZE);
+			return 0;
+		}
 	}
 	else if(letter_type == CONSOLAS)
 	{
@@ -297,14 +324,22 @@ uint16_t * draw_cursive_letter(unsigned char letter, unsigned char letter_type, 
 			width = consolas_glyph_dsc[letter-32][0];
 			bitmap_height = LETTER_SIZE_2_HEIGHT;
 		}
-	}
-	//next line test
-		if(xd+width*2 >= VGA_DISPLAY_X)
+		else
 		{
-			yd+=bitmap_height;
-			begin_x=5;//sets x value to the left +5 pixels
+			API_err_handler(UNKNOWN_FONT_SIZE);
+			return 0;
 		}
-	//end test
+	}
+	if(xd+width*2 >= VGA_DISPLAY_X)
+	{
+		yd+=bitmap_height;
+		begin_x=5;//sets x value to the left +5 pixels
+	}
+	if(yd >= VGA_DISPLAY_Y)
+	{
+		API_err_handler(Y_TO_HIGH);
+		return 0;
+	}
 	if(width%8)
 		width += 8;
 	angle = width; //sets angle offset for cursive letter
@@ -360,6 +395,11 @@ uint16_t * draw_fat_letter(unsigned char letter, unsigned char letter_type, uint
 			width = arial_glyph_dsc[letter-32][0];
 			bitmap_height = LETTER_SIZE_2_HEIGHT;
 		}
+		else
+		{
+			API_err_handler(UNKNOWN_FONT_SIZE);
+			return 0;
+		}
 	}
 	else if(letter_type == CONSOLAS)
 	{
@@ -377,14 +417,22 @@ uint16_t * draw_fat_letter(unsigned char letter, unsigned char letter_type, uint
 			width = consolas_glyph_dsc[letter-32][0];
 			bitmap_height = LETTER_SIZE_2_HEIGHT;
 		}
+		else
+		{
+			API_err_handler(UNKNOWN_FONT_SIZE);
+			return 0;
+		}
 	}
-	//next line test
 	if(xd+width+THICKNESS >= VGA_DISPLAY_X)
 	{
 		yd+=bitmap_height;
 		begin_x=5;//sets x value to the left +5 pixels
 	}
-//end test
+	if(yd >= VGA_DISPLAY_Y)
+	{
+		API_err_handler(Y_TO_HIGH);
+		return 0;
+	}
 	if(width%8)
 		width += 8;
 	width = (width/8);
@@ -476,14 +524,14 @@ int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
     fres = f_mount(&FatFs, "", 1); //1=mount now
     if (fres != FR_OK)
     {
-    	printf("f_mount error (%i)\r\n", fres);
+    	API_err_handler(NO_SD_CARD_DETECTED);
     	return 0; //error
     }
 
 	fres = f_open(&fil, File, FA_READ);
 	if (fres != FR_OK)
 	{
-		printf("f_open error (%i)\r\n",fres);
+		API_err_handler(UNKNOWN_BITMAP);
 		return 0; //error
 	}
 
@@ -596,7 +644,7 @@ int API_blur_screen()
  * @return
  *
  *****************************************************************************/
-unsigned int wacht(uint16_t msecs)
+unsigned int API_wacht(uint16_t msecs)
 {
 	HAL_Delay(msecs);
 	return 1;
@@ -610,10 +658,10 @@ void API_err_handler(int API_err_in)
 		printf("dit bericht is niet volgens de richtlijnen, type help voor meer informatie");
 		break;
 	case X_OUT_OF_BOUNDS:
-		printf("Een van de ingevulde X coördinaten is niet geldig, X mag niet groter zijn dan 320");
+		printf("Een van de ingevulde X coordinaten is niet geldig, X mag niet groter zijn dan 320");
 		break;
 	case Y_OUT_OF_BOUNDS:
-		printf("Een van de ingevulde Y coördinaten is niet geldig, X mag niet groter zijn dan 240");
+		printf("Een van de ingevulde Y coordinaten is niet geldig, X mag niet groter zijn dan 240");
 		break;
 	case NOT_A_NUMBER:
 		printf("Op de plek waar je een getal in moet vullen heb je iets anders ingevuld");
@@ -651,11 +699,13 @@ void API_err_handler(int API_err_in)
 	case NO_COMMA_DETECTED:
 		printf("er mist een , tussen de verschillende onderdelen van je message");
 		break;
+	case NO_END_TERMINATOR:
+		printf("er mist een string terminator in je message");
+		break;
 	default:
 		printf("onbekende error");
 		break;
 	}
 	printf("\n type help voor meer informatie");
-	main();
 }
 
