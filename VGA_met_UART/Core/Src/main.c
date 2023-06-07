@@ -151,15 +151,16 @@ int main(void)
   // See stm32f4xx_it.c
   HAL_UART_Receive_IT(&huart2, input.byte_buffer_rx, LINE_BUFLEN);
   //API_read_bitmap_SD("01", 0, 0);
-  char test[] = "the quick brown fox jumps over the lazy dog";
+  char test[] = "<3 (*o*)";
   test[sizeof(test)+1]= '\0';
   char test_naam[] = "consolas";
-  char test_style[] = "cursief";
+  char test_style[] = "normaal";
   char* tekst = test;
   char* fontnaam = test_naam;
   char* fontstijl = test_style;
-  API_draw_text(10, 200, VGA_COL_CYAN, tekst, fontnaam, 1, fontstijl);
-
+  API_draw_text(90, 120, VGA_COL_CYAN, tekst, fontnaam, 1, fontstijl);
+  //HAL_delay(2000);
+  API_draw_line(10, 10, 100, 100, 20, VGA_COL_BLUE);
 
   int j = 0;
 
@@ -187,6 +188,11 @@ int main(void)
 
 		  // When finished reset the flag
 		  input.command_execute_flag = FALSE;
+	  }
+	  if(API_err_code != 0x00)
+	  {
+		  API_err_handler();
+		  //clear screen maybe?
 	  }
     /* USER CODE END WHILE */
 

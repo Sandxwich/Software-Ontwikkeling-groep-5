@@ -37,7 +37,8 @@ int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_
 	{
 		steps = abs(dy);
 	}
-
+	else if(abs(dx)==abs(dy))
+		steps = abs(dy);
 	float xIncrement = (float) dx / steps;
 	float yIncrement = (float) dy / steps;
 	int i;
@@ -520,10 +521,13 @@ void API_err_handler()
 	switch(API_err_code)
 	{
 	case INVALID_MESSAGE:
+		printf("dit bericht is niet volgens de richtlijnen, type help voor meer informatie");
 		break;
 	case X_OUT_OF_BOUNDS:
+		printf("Een van de ingevulde X coördinaten is niet geldig, X mag niet groter zijn dan 320");
 		break;
 	case Y_OUT_OF_BOUNDS:
+		printf("Een van de ingevulde Y coördinaten is niet geldig, X mag niet groter zijn dan 240");
 		break;
 	case NOT_A_NUMBER:
 		break;
