@@ -9,6 +9,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "fatfs.h"
 #include "main.h"
+#include "math.h"
 #include "Arial.h"
 #include "Arial_24.h"
 #include "Consolas.h"

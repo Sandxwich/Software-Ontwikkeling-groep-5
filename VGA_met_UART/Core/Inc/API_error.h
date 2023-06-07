@@ -5,8 +5,6 @@
 #ifdef __cplusplus
  extern "C" {
 #endif
-/*global error variable ------------------------------------------------------*/
- static unsigned char API_err_code = 0x00;
 /*ERROR codes ----------------------------------------------------------------*/
 #define NO_ERROR				0x00 //geen errors
 #define	INVALID_MESSAGE			0x01 //mist input variables

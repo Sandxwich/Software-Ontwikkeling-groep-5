@@ -64,7 +64,6 @@ int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_
 int API_clear_screen(uint8_t color)
 {
 	UB_VGA_FillScreen(color);
-
 }
 
 int API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16_t hoogte, uint8_t color, uint8_t gevuld)
@@ -149,8 +148,7 @@ int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* font
 	}
 	else
 	{
-		API_err_code = UNKNOWN_FONT;
-		return 0;
+		API_err_handler(UNKNOWN_FONT);
 	}
 	for(i = 0; tekst[i] != '\0'; i++)
 	{
@@ -172,8 +170,7 @@ int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* font
 			yd = cord_p[1];
 			break;
 		default:
-			API_err_code = UNKNOWN_FONT_STYLE;
-			return 0;
+			API_err_handler(UNKNOWN_FONT_STYLE);
 			break;
 		}
 	}
@@ -607,9 +604,9 @@ unsigned int wacht(uint16_t msecs)
 	return 1;
 }
 
-void API_err_handler()
+void API_err_handler(int API_err_in)
 {
-	switch(API_err_code)
+	switch(API_err_in)
 	{
 	case INVALID_MESSAGE:
 		printf("dit bericht is niet volgens de richtlijnen, type help voor meer informatie");
@@ -656,8 +653,11 @@ void API_err_handler()
 	case NO_COMMA_DETECTED:
 		printf("er mist een , tussen de verschillende onderdelen van je message");
 		break;
+	default:
+		printf("onbekende error");
+		break;
 	}
 	printf("\n type help voor meer informatie");
-	return NULL;
+	main();
 }
 

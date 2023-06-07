@@ -15,7 +15,7 @@
 
 
 
-#define BUFFER_LEN 20
+#define BUFFER_LEN 50
 #define CIRCULAIR_BUFFER 10
 
 

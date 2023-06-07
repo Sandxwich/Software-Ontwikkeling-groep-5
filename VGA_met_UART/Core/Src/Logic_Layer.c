@@ -83,8 +83,8 @@ int LogicLayer_CommandCheck(Message_parser *localParser)
 	{
 		return stringCorrect;
 	}
-	else return 0;
-
+	else API_err_handler(UNKNOWN_FUNCTION);
+	return 0;
 }
 
 int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
@@ -106,14 +106,11 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 			y_2 = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[4]), 4);
 			color = LogicLayer_ColourCheck(localParser, 5);
 			dikte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
-
-
-
 			API_draw_line(x_1, y_1, x_2, y_2, dikte, color);
-
+			return 0;
 			break;
 			}
-			else return 0;
+			else API_err_handler(INVALID_MESSAGE);
 		}
 
 		case 2:	//rechthoek
@@ -137,7 +134,11 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 
 		case 3: //tekst
 		{
-
+			uint16_t x = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+			uint16_t y = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+			uint8_t kleur = LogicLayer_ColourCheck(localParser, 3);
+			uint8_t fontgrootte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
+			API_draw_text(x, y, kleur, localParser->Parser_Message[4],localParser->Parser_Message[5], fontgrootte, localParser->Parser_Message[7]);
 			break;
 		}
 
@@ -169,10 +170,11 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 		}
 		default:
 		{
+			API_err_handler(NO_ERROR)
 			return 0;
 		}
 	}
-	return 1;
+	return NO_ERROR;
 }
 
 int LogicLayer_ColourCheck(Message_parser* localParser, unsigned char StructLocation)

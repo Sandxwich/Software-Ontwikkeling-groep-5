@@ -171,31 +171,18 @@ int main(void)
 		  else
 		  {
 			  LogicLayer_CommandSwitch(&Debugging, Test);
-
 		  }
 		  for(i = 0; i < LINE_BUFLEN; i++)
 			  input.line_rx_buffer[i] = 0;
 		  for (i = 0; i < BUFFER_LEN; i++)
 			  for (int j = 0; j < BUFFER_LEN; j++)
 				  Debugging.Parser_Message[i][j] = 0;
-
-
-
-
-
-
 		  // Do some stuff
 		  printf("yes\n");
 		  //UB_VGA_FillScreen(colorTest);
 
-
 		  // When finished reset the flag
 		  input.command_execute_flag = FALSE;
-	  }
-	  if(API_err_code != 0x00)
-	  {
-		  API_err_handler();
-		  //clear screen maybe?
 	  }
     /* USER CODE END WHILE */
 
