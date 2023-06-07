@@ -74,49 +74,6 @@ int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
 	  return error;
 }
 
-//	switch (nr)
-//	{
-//
-//	case 0:	// Pijl up
-//	{
-//		//doe iets met de bitmap
-//		break;
-//	}
-//
-//	case 1:	// Pijl down
-//	{
-//
-//		break;
-//	}
-//
-//	case 2:	// Pijl Left
-//	{
-//
-//		break;
-//	}
-//
-//	case 3: // Pijl Right
-//	{
-//
-//		break;
-//	}
-//
-//	case 4: // Smiley
-//	{
-//
-//		break;
-//	}
-//
-//	case 5: // Frowney
-//	{
-//
-//		break;
-//	}
-//
-//	}
-//	return error;
-//}
-
 int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* fontnaam,uint8_t fontgrootte,char* fontstijl)
 {
 	uint8_t i;
@@ -132,27 +89,36 @@ int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* font
 	{
 		letter_style = CONSOLAS;
 	}
-		for(i = 0; tekst[i] != '\0'; i++)
+	else
+	{
+		API_err_code = UNKNOWN_FONT;
+		return 0;
+	}
+	for(i = 0; tekst[i] != '\0'; i++)
+	{
+		switch(fontstijl[0])
 		{
-			switch(fontstijl[0])
-			{
-			case 'n':
-				cord_p = draw_normal_letter(tekst[i], letter_style, xd, yd, fontgrootte, kleur, cord_p);
-				xd = cord_p[0];
-				yd = cord_p[1];
-				break;
-			case 'v':
-				cord_p = draw_fat_letter(tekst[i], letter_style, xd, yd, fontgrootte, kleur, cord_p);
-				xd = cord_p[0];
-				yd = cord_p[1];
-				break;
-			case 'c':
-				cord_p = draw_cursive_letter(tekst[i], letter_style, xd, yd, fontgrootte, kleur, cord_p);
-				xd = cord_p[0];
-				yd = cord_p[1];
-				break;
-			}
+		case 'n':
+			cord_p = draw_normal_letter(tekst[i], letter_style, xd, yd, fontgrootte, kleur, cord_p);
+			xd = cord_p[0];
+			yd = cord_p[1];
+			break;
+		case 'v':
+			cord_p = draw_fat_letter(tekst[i], letter_style, xd, yd, fontgrootte, kleur, cord_p);
+			xd = cord_p[0];
+			yd = cord_p[1];
+			break;
+		case 'c':
+			cord_p = draw_cursive_letter(tekst[i], letter_style, xd, yd, fontgrootte, kleur, cord_p);
+			xd = cord_p[0];
+			yd = cord_p[1];
+			break;
+		default:
+			API_err_code = UNKNOWN_FONT_STYLE;
+			return 0;
+			break;
 		}
+	}
 	return 0;//returns error
 }
 
@@ -530,29 +496,43 @@ void API_err_handler()
 		printf("Een van de ingevulde Y coördinaten is niet geldig, X mag niet groter zijn dan 240");
 		break;
 	case NOT_A_NUMBER:
+		printf("Op de plek waar je een getal in moet vullen heb je iets anders ingevuld");
 		break;
 	case NOT_A_CHARACTER:
+		printf("Op de plek waar je een character in moet vullen heb je iets anders ingevuld");
 		break;
 	case UNKNOWN_COLOR:
+		printf("de kleur die je hebt uitgekozen staat niet in de lijst van mogelijke kleuren");
 		break;
 	case UNKNOWN_BITMAP:
+		printf("de bitmap die je zoekt staat niet het lijst van mogelijke bitmaps");
 		break;
 	case UNKNOWN_FONT:
+		printf("de font die je invult is niet bekent. probeer arial of consolas");
 		break;
 	case UNKNOWN_FONT_SIZE:
+		printf("de size die je hier invult is niet geldig. probeer 1 of 2");
 		break;
 	case UNKNOWN_FONT_STYLE:
+		printf("de stijl die je invult is niet bekent. probeer normaal, vet of cursief");
 		break;
 	case UNKNOWN_FUNCTION:
+		printf("de functie die je invult bestaat niet");
 		break;
 	case Y_TO_HIGH:
+		printf("de functie gaat de maximale y waarde voorbij");
 		break;
 	case X_TO_HIGH:
+		printf("de functie gaat de maximale x waarde voorbij");
 		break;
 	case NO_SD_CARD_DETECTED:
+		printf("er is geen SD kaart aanwezig, check SD kaart slot");
 		break;
 	case NO_COMMA_DETECTED:
+		printf("er mist een , tussen de verschillende onderdelen van je message");
 		break;
 	}
+	printf("\n type help voor meer informatie");
+	return NULL;
 }
 
