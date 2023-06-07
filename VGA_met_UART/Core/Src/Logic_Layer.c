@@ -5,6 +5,19 @@
 
 Message_parser LogicLayer_Parser(char*, unsigned int);
 
+/**********************************************************************//**
+@brief This function serves as a parser for the project
+
+@param Message
+@param MessageLength
+
+
+@return Returns a parser
+@return Returns an error if error or returns nothing
+
+
+ *************************************************************************/
+
 Message_parser LogicLayer_Parser(char *Message, unsigned int Messagelength)
 {
 	unsigned int i,j,k,l = 0;			// Maak iterators aan voor het maken van een moving window langs de buffer message

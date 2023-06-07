@@ -37,13 +37,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  00026596  00000000  00000000  0003c5d8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0001ea39  00000000  00000000  00062b6e  2**0
+ 17 .debug_line   0001ea42  00000000  00000000  00062b6e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000d103c  00000000  00000000  000815a7  2**0
+ 18 .debug_str    000d103c  00000000  00000000  000815b0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  001525e3  2**0
+ 19 .comment      00000050  00000000  00000000  001525ec  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00005ca0  00000000  00000000  00152634  2**2
+ 20 .debug_frame  00005ca0  00000000  00000000  0015263c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1200,9 +1200,9 @@ Disassembly of section .text:
 	...
 
 08000ea0 <API_draw_circle>:
-//	}
-//
-//}
+}
+
+
 
 int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
 {
@@ -1321,8 +1321,9 @@ int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
             }
         }
     }
+    return 0;
+ 8000f80:	2300      	movs	r3, #0
 }
- 8000f80:	bf00      	nop
  8000f82:	4618      	mov	r0, r3
  8000f84:	3718      	adds	r7, #24
  8000f86:	46bd      	mov	sp, r7

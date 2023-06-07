@@ -3,22 +3,21 @@
 #include "EE-API.h"
 
 
-/*
- * int API_draw_line(int x_1, y_1, x_2, y2, color, dikte)
- *
- * inputs:
- * 	x_1:
- * 	y_1:
- * 	x_2:
- * 	y_2:
- * 	color:
- * 	dikte:
- *
- * outputs:
- * 	error:
- * 	bitmap:
- *
- */
+/**********************************************************************//**
+@brief This function lets the user draw a line on a VGA screen
+
+@param x_1
+@param y_1
+@param x_2
+@param y_2
+@param dikte this variable sets the thickness of the line
+@param color This variable sets the color for the screen
+
+@return Returns bitman
+@return Returns an error if error or returns nothing
+
+
+ *************************************************************************/
 
 int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_t dikte, uint8_t color)
 {
@@ -57,13 +56,40 @@ int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_
 	return error;
 }
 
+/**********************************************************************//**
+@brief This function lets the user clear a VGA screen
+
+@param color This variable sets the color for the screen
+
+
+@return Returns an error if error or returns nothing
+
+
+ *************************************************************************/
+
 int API_clear_screen(uint8_t color)
 {
 	UB_VGA_FillScreen(color);
 
+	return 0;
 }
 
 
+/**********************************************************************//**
+@brief This function lets the user draw a rectangle on a VGA screen
+
+@param x_lup This variable sets the starting x coordinate for the rectangle
+@param y_lup This variable sets the starting y coordinate for the rectangle
+@param breedte This variable sets the width for the rectangle
+@param hoogte This variable sets the height for the rectangle
+@param color This variable sets the color for the rectangle
+@param gevuld This variable decides if the rectangle is filled or not (filled = 1, not filled = 0)
+
+
+@return Returns an error if error or returns nothing
+
+
+ *************************************************************************/
 
 int API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16_t hoogte, uint8_t color, uint8_t gevuld)
 {
@@ -103,38 +129,23 @@ int API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16_
 				}
 			}
 	}
+	return 0;
 }
 
 
-//int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
-//{
-//	int i;
-//	int j;
-//	int rads;
-//	int rad = 0;
-//	int x_c2 = x_c;
-//	int y_c2 = y_c;
-//
-//
-//
-//	for (j = 0; j <= radius * 2; j++)
-//	{
-//		for(i = 0; i <= radius * 2; i++)
-//		{
-//			rads = (pow(i, 2) + pow(j, 2));
-//			rad = sqrt(rads);
-//
-//			if(rad == radius)
-//			{
-//				UB_VGA_SetPixel((x_c2 - radius + i), (y_c2 - radius + j), color);
-//			}
-//			x_c++;
-//		}
-//		x_c = x_c2;
-//		y_c++;
-//	}
-//
-//}
+/**********************************************************************//**
+@brief This function lets the user draw a circle on a VGA screen
+
+@param x_c This variable sets the starting x coordinate for the circle
+@param y_c This variable sets the starting y coordinate for the circle
+@param radius This variable sets the radius for the circle
+@param color This variable sets the color for the circle
+
+
+@return Returns an error if error or returns nothing
+
+
+ *************************************************************************/
 
 int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
 {
@@ -157,7 +168,22 @@ int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
             }
         }
     }
+    return 0;
 }
+
+
+/**********************************************************************//**
+@brief
+
+@param nr
+@param x_lup
+@param y_lup
+
+
+@return Returns an error if error or returns nothing
+
+
+ *************************************************************************/
 
 int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
 {
@@ -174,49 +200,20 @@ int API_draw_bitmap(uint16_t nr, uint16_t x_lup, uint16_t y_lup)
 	    yp2++;
 	  }
 
-
-//	switch (nr)
-//	{
-//
-//	case 0:	// Pijl up
-//	{
-//		//doe iets met de bitmap
-//		break;
-//	}
-//
-//	case 1:	// Pijl down
-//	{
-//
-//		break;
-//	}
-//
-//	case 2:	// Pijl Left
-//	{
-//
-//		break;
-//	}
-//
-//	case 3: // Pijl Right
-//	{
-//
-//		break;
-//	}
-//
-//	case 4: // Smiley
-//	{
-//
-//		break;
-//	}
-//
-//	case 5: // Frowney
-//	{
-//
-//		break;
-//	}
-//
-//	}
 	return error;
 }
+
+/**********************************************************************//**
+@brief
+
+@param nr
+@param x_lup
+@param y_lup
+
+
+@return Returns an error if error or returns nothing
+
+ *************************************************************************/
 
 int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 {
@@ -329,6 +326,15 @@ int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 
 	return 0;
 }
+
+/**********************************************************************//**
+@brief This function sets an integer to Ascii
+
+@param number
+
+@return Returns ascii value
+
+ *************************************************************************/
 
 int intToAscii(int number)
 {
