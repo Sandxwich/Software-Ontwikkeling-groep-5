@@ -15,7 +15,8 @@
 
 
 
-#define BUFFER_LEN 50
+#define BUFFER_LEN_PARSER 50
+#define ARGUMENTEN_LEN 20
 #define CIRCULAIR_BUFFER 10
 
 
@@ -24,7 +25,7 @@
  typedef struct
  {
  	unsigned char Variable_length; // Hoeveelheid array
- 	char Parser_Message[BUFFER_LEN][BUFFER_LEN]; // 2d array voor het returnen van de message
+ 	char Parser_Message[ARGUMENTEN_LEN][BUFFER_LEN_PARSER]; // 2d array voor het returnen van de message
  } Message_parser;
 
  extern Message_parser Debugging;
