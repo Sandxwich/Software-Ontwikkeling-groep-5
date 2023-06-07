@@ -137,7 +137,12 @@ int LogicLayer_CommandSwitch(Message_parser *localParser, unsigned char Command)
 
 		case 3: //tekst
 		{
+			uint16_t x = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[1]), 1);
+			uint16_t y = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[2]), 2);
+			uint8_t kleur = LogicLayer_ColourCheck(localParser, 3);
+			uint8_t fontgrootte = LogicLayer_intToAscii(localParser, strlen(localParser->Parser_Message[6]), 6);
 
+			API_draw_text(x, y, kleur, localParser->Parser_Message[4],localParser->Parser_Message[5], fontgrootte, localParser->Parser_Message[7]);
 			break;
 		}
 
@@ -207,7 +212,7 @@ unsigned int LogicLayer_intToAscii(Message_parser* localParser, int numbersize, 
 			DecimalshiftBuff = localParser->Parser_Message[StructLocation][i];	// making sure array doesnt have a negative number
 			if (DecimalshiftBuff < '0' ||  DecimalshiftBuff > '9')
 		{
-				printf("Error NaN");
+
 		}
 			else
 		{

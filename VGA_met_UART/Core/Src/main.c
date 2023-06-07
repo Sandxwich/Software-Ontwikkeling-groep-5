@@ -175,8 +175,8 @@ int main(void)
 		  }
 		  for(i = 0; i < LINE_BUFLEN; i++)
 			  input.line_rx_buffer[i] = 0;
-		  for (i = 0; i < BUFFER_LEN; i++)
-			  for (int j = 0; j < BUFFER_LEN; j++)
+		  for (i = 0; i < ARGUMENTEN_LEN; i++)
+			  for (int j = 0; j < BUFFER_LEN_PARSER; j++)
 				  Debugging.Parser_Message[i][j] = 0;
 
 
