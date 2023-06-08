@@ -54,12 +54,42 @@ int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_
 	return error;
 }
 
-void API_clear_screen(uint8_t color)
+/**********************************************************************//**
+@brief This function lets the user clear a VGA screen
+
+@param color This variable sets the color for the screen
+
+
+@return Returns an error if error or returns nothing
+
+
+ *************************************************************************/
+
+int API_clear_screen(uint8_t color)
 {
 	UB_VGA_FillScreen(color);
+
+	return 0;
 }
 
-void API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16_t hoogte, uint8_t color, uint8_t gevuld)
+
+/**********************************************************************//**
+@brief This function lets the user draw a rectangle on a VGA screen
+
+@param x_lup This variable sets the starting x coordinate for the rectangle
+@param y_lup This variable sets the starting y coordinate for the rectangle
+@param breedte This variable sets the width for the rectangle
+@param hoogte This variable sets the height for the rectangle
+@param color This variable sets the color for the rectangle
+@param gevuld This variable decides if the rectangle is filled or not (filled = 1, not filled = 0)
+
+
+@return Returns an error if error or returns nothing
+
+
+ *************************************************************************/
+
+int API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16_t hoogte, uint8_t color, uint8_t gevuld)
 {
 	int xp = 0;
 	int yp = 0;
@@ -97,9 +127,25 @@ void API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16
 				}
 			}
 	}
+	return 0;
 }
 
-void API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
+
+/**********************************************************************//**
+@brief This function lets the user draw a circle on a VGA screen
+
+@param x_c This variable sets the starting x coordinate for the circle
+@param y_c This variable sets the starting y coordinate for the circle
+@param radius This variable sets the radius for the circle
+@param color This variable sets the color for the circle
+
+
+@return Returns an error if error or returns nothing
+
+
+ *************************************************************************/
+
+int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
 {
     int i;
     int j;
