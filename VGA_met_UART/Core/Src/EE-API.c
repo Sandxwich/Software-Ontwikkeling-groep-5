@@ -1,8 +1,19 @@
 
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : EE-API.c
+  * @brief          : File that serves as VGA library
+  ******************************************************************************
+  * @attention
+  *******************************************************************************
+  */
+/* USER CODE END Header */
+
 /* Includes ------------------------------------------------------------------*/
 #include "EE-API.h"
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
  * @brief Deze functie tekent een lijn van 2 coordinaten
  * 		  Dit wordt gedaan aan de hand van  Bresenham algoritme
@@ -54,12 +65,42 @@ int API_draw_line(uint16_t x_1, uint16_t y_1, uint16_t x_2, uint16_t y_2, uint8_
 	return error;
 }
 
-void API_clear_screen(uint8_t color)
+/**********************************************************************//**
+@brief This function lets the user clear a VGA screen
+
+@param color This variable sets the color for the screen
+
+
+@return Returns an error if error or returns nothing
+
+
+ *************************************************************************/
+
+int API_clear_screen(uint8_t color)
 {
 	UB_VGA_FillScreen(color);
+
+	return 0;
 }
 
-void API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16_t hoogte, uint8_t color, uint8_t gevuld)
+
+/**********************************************************************//**
+@brief This function lets the user draw a rectangle on a VGA screen
+
+@param x_lup This variable sets the starting x coordinate for the rectangle
+@param y_lup This variable sets the starting y coordinate for the rectangle
+@param breedte This variable sets the width for the rectangle
+@param hoogte This variable sets the height for the rectangle
+@param color This variable sets the color for the rectangle
+@param gevuld This variable decides if the rectangle is filled or not (filled = 1, not filled = 0)
+
+
+@return Returns an error if error or returns nothing
+
+
+ *************************************************************************/
+
+int API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16_t hoogte, uint8_t color, uint8_t gevuld)
 {
 	int xp = 0;
 	int yp = 0;
@@ -97,9 +138,25 @@ void API_draw_rectangle(uint16_t x_lup, uint16_t y_lup, uint16_t breedte, uint16
 				}
 			}
 	}
+	return 0;
 }
 
-void API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
+
+/**********************************************************************//**
+@brief This function lets the user draw a circle on a VGA screen
+
+@param x_c This variable sets the starting x coordinate for the circle
+@param y_c This variable sets the starting y coordinate for the circle
+@param radius This variable sets the radius for the circle
+@param color This variable sets the color for the circle
+
+
+@return Returns an error if error or returns nothing
+
+
+ *************************************************************************/
+
+int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
 {
     int i;
     int j;
@@ -123,7 +180,7 @@ void API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
 
 }
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
  * @brief This function looks at the incomming string and checks what kind of font and style it wants
  *
@@ -195,7 +252,7 @@ int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* font
 	return 0;
 }
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
  * @brief This function prints the letter normally
  *
@@ -293,7 +350,7 @@ uint16_t * draw_normal_letter(unsigned char letter, unsigned char letter_type, u
     return cord_p;
 }
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
  * @brief This function prints the letter but adds an angle by offsetting the x value and decreasing this offset each y layer
  *
@@ -394,7 +451,7 @@ uint16_t * draw_cursive_letter(unsigned char letter, unsigned char letter_type, 
     return cord_p;
 }
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
  * @brief This function prints the letter with added pixels horizontally to create a fatter looking letter
  *
@@ -505,7 +562,7 @@ uint16_t * draw_fat_letter(unsigned char letter, unsigned char letter_type, uint
 
 
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
  * @brief This function lets the user select an bitmap from the SD card, This bitmap will be pushed to the VGA screen
  *
@@ -630,7 +687,7 @@ int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 }
 
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
  * @brief This function lets the user blur the screen using a filter kernel
  *
@@ -670,22 +727,22 @@ int API_blur_screen()
 	return 0;
 	}
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
- * @brief
+ * @brief This function lets the user hold the program for a given miliseconds
  *
- * @param
+ * @param msecs Time that the program holds
  *
- * @return
+ * @return returns 0
  *
  *****************************************************************************/
 unsigned int API_wacht(uint16_t msecs)
 {
 	HAL_Delay(msecs);
-	return 1;
+	return 0;
 }
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
  * @brief This function shows the user that they made an error, and what this error is
  *

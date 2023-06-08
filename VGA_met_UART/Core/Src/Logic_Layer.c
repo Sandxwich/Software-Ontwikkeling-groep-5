@@ -1,3 +1,14 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : Logic_Layer.c
+  * @brief          : File that serves as Logic layer
+  ******************************************************************************
+  * @attention
+  *******************************************************************************
+  */
+/* USER CODE END Header */
+
 /*
  * Logic_Layer.c
  * J.van Valkengoed, J. Riensema, Y. Henken
@@ -15,7 +26,7 @@
 
 
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
  * @brief Deze functie deelt de gegeven buffer op in hokjes om uit te kunnen lezen
  *
@@ -81,7 +92,7 @@ Message_parser LogicLayer_Parser(char *PMessage, unsigned int Messagelength)
 	return PlocalParser;
 }
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
  * @brief Deze functie kijkt naar welk command ontvangen is door de IO-laag
  *
@@ -115,7 +126,7 @@ int LogicLayer_CommandCheck(Message_parser* PlocalParser)
 	return 0;
 }
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
  * @brief Deze functie kijkt naar welke commando ontvangen is, adhv de commando bepaalt het of er genoeg variabelen zijn en stopt het in de corresponderende commando
  *
@@ -310,7 +321,7 @@ int LogicLayer_CommandSwitch(Message_parser* PlocalParser, unsigned char Command
 
 		case 9:
 		{
-			if (PlocalParser->Variable_length-1 == 1)
+			if (PlocalParser->Variable_length-1 == 0)
 			{
 				API_blur_screen();
 				break;
@@ -333,7 +344,7 @@ int LogicLayer_CommandSwitch(Message_parser* PlocalParser, unsigned char Command
 	return NO_ERROR;
 }
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
  * @brief Deze functie kijkt naar welke kleur ontvangen is, dit geeft de kleur de corresponderende 8-bit kleur code
  *
@@ -364,7 +375,7 @@ int LogicLayer_ColourCheck(Message_parser* PlocalParser, unsigned char StructLoc
 
 }
 
-/*****************************************************************************
+/*****************************************************************************//**
  *
  * @brief Deze functie vertaald de string naar een decimale waarde
  *
