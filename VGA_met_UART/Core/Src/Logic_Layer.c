@@ -321,7 +321,7 @@ int LogicLayer_CommandSwitch(Message_parser* PlocalParser, unsigned char Command
 
 		case 9:
 		{
-			if (PlocalParser->Variable_length-1 == 1)
+			if (PlocalParser->Variable_length-1 == 0)
 			{
 				API_blur_screen();
 				break;
