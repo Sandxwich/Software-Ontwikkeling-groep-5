@@ -1,8 +1,19 @@
 
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : EE-API.c
+  * @brief          : File that serves as VGA library
+  ******************************************************************************
+  * @attention
+  *******************************************************************************
+  */
+/* USER CODE END Header */
+
 /* Includes ------------------------------------------------------------------*/
 #include "EE-API.h"
 
-/*****************************************************************************
+/*****************************************************************************//*
  *
  * @brief Deze functie tekent een lijn van 2 coordinaten
  * 		  Dit wordt gedaan aan de hand van  Bresenham algoritme
@@ -169,7 +180,7 @@ int API_draw_circle(uint16_t x_c, uint16_t y_c, uint16_t radius, uint8_t color)
 
 }
 
-/*****************************************************************************
+/*****************************************************************************//*
  *
  * @brief This function looks at the incomming string and checks what kind of font and style it wants
  *
@@ -241,7 +252,7 @@ int API_draw_text(uint16_t x, uint16_t y, uint8_t kleur, char* tekst, char* font
 	return 0;
 }
 
-/*****************************************************************************
+/*****************************************************************************//*
  *
  * @brief This function prints the letter normally
  *
@@ -339,7 +350,7 @@ uint16_t * draw_normal_letter(unsigned char letter, unsigned char letter_type, u
     return cord_p;
 }
 
-/*****************************************************************************
+/*****************************************************************************//*
  *
  * @brief This function prints the letter but adds an angle by offsetting the x value and decreasing this offset each y layer
  *
@@ -440,7 +451,7 @@ uint16_t * draw_cursive_letter(unsigned char letter, unsigned char letter_type, 
     return cord_p;
 }
 
-/*****************************************************************************
+/*****************************************************************************//*
  *
  * @brief This function prints the letter with added pixels horizontally to create a fatter looking letter
  *
@@ -551,7 +562,7 @@ uint16_t * draw_fat_letter(unsigned char letter, unsigned char letter_type, uint
 
 
 
-/*****************************************************************************
+/*****************************************************************************//*
  *
  * @brief This function lets the user select an bitmap from the SD card, This bitmap will be pushed to the VGA screen
  *
@@ -676,7 +687,7 @@ int API_read_bitmap_SD(char *nr, uint16_t x_lup, uint16_t y_lup)
 }
 
 
-/*****************************************************************************
+/*****************************************************************************//*
  *
  * @brief This function lets the user blur the screen using a filter kernel
  *
@@ -716,22 +727,22 @@ int API_blur_screen()
 	return 0;
 	}
 
-/*****************************************************************************
+/*****************************************************************************//*
  *
- * @brief
+ * @brief This function lets the user hold the program for a given miliseconds
  *
- * @param
+ * @param msecs Time that the program holds
  *
- * @return
+ * @return returns 0
  *
  *****************************************************************************/
 unsigned int API_wacht(uint16_t msecs)
 {
 	HAL_Delay(msecs);
-	return 1;
+	return 0;
 }
 
-/*****************************************************************************
+/*****************************************************************************//*
  *
  * @brief This function shows the user that they made an error, and what this error is
  *

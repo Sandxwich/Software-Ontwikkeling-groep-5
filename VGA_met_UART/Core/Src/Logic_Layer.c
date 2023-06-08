@@ -1,3 +1,14 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : Logic_Layer.c
+  * @brief          : File that serves as Logic layer
+  ******************************************************************************
+  * @attention
+  *******************************************************************************
+  */
+/* USER CODE END Header */
+
 /*
  * Logic_Layer.c
  * J.van Valkengoed, J. Riensema, Y. Henken
